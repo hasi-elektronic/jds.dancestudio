@@ -1,676 +1,1281 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>JDS Dance Studio</title>
+  <title>JDS. Janina Dance Studio — Vaihingen/Enz</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --black: #0a0a0a;
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --white: #f5f0e8;
-      --gray: #1a1a1a;
-      --muted: #888;
+      --bg:       #080808;
+      --surface:  #0f0f0f;
+      --card:     #141414;
+      --pink:     #e8007a;
+      --pink-2:   #ff2d96;
+      --cyan:     #00e5c8;
+      --white:    #f5f5f5;
+      --muted:    rgba(245,245,245,0.45);
+      --border:   rgba(232,0,122,0.18);
+      --grd:      linear-gradient(135deg, var(--pink), var(--pink-2));
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--black);
+      background: var(--bg);
       color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
+      font-family: 'Space Grotesk', sans-serif;
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--pink); }
+
+    /* ══ NAV ══ */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.5rem 4rem;
-      background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
-      backdrop-filter: blur(4px);
+      padding: 1.2rem 4rem;
+      backdrop-filter: blur(24px) saturate(180%);
+      background: rgba(8,8,8,0.85);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
     }
 
     .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      letter-spacing: 0.1em;
-      color: var(--gold);
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem; font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--white);
+    }
+    .logo .dot { color: var(--pink); }
+    .logo-sub {
+      font-size: 0.55rem; font-weight: 400;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--muted); display: block; margin-top: -4px;
     }
 
-    .logo span { font-style: italic; color: var(--white); }
-
-    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul { list-style: none; display: flex; gap: 2rem; align-items: center; }
     nav ul a {
       text-decoration: none; color: var(--white);
-      font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;
-      opacity: 0.8; transition: opacity 0.3s, color 0.3s;
+      font-size: 0.85rem; font-weight: 500;
+      opacity: 0.65; transition: opacity 0.2s, color 0.2s;
     }
-    nav ul a:hover { opacity: 1; color: var(--gold); }
+    nav ul a:hover { opacity: 1; color: var(--pink); }
 
-    .nav-cta {
-      background: var(--gold); color: var(--black) !important;
-      padding: 0.6rem 1.4rem; border-radius: 2px;
-      font-weight: 500; opacity: 1 !important;
-      transition: background 0.3s !important;
+    .nav-pill {
+      background: var(--grd) !important;
+      color: #fff !important; opacity: 1 !important;
+      padding: 0.55rem 1.4rem; border-radius: 4px;
+      font-weight: 700 !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+      box-shadow: 0 0 20px rgba(232,0,122,0.4);
     }
-    .nav-cta:hover { background: var(--gold-light) !important; }
+    .nav-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(232,0,122,0.6) !important;
+    }
 
-    /* ── HERO ── */
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 8px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; position: fixed;
+      top: 65px; left: 0; right: 0; z-index: 998;
+      background: rgba(8,8,8,0.98); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column; padding: 1.5rem 2rem; gap: 1.2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none; color: var(--white);
+      font-size: 1.1rem; font-weight: 500;
+      padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* ══ HERO ══ */
     #hero {
-      height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-      background: var(--black);
-      overflow: hidden;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding: 8rem 4rem 5rem;
     }
 
-    .hero-bg {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 20% 60%, rgba(201,168,76,0.05) 0%, transparent 60%);
+    /* Animated blobs */
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(90px); pointer-events: none;
+      animation: blobFloat 14s ease-in-out infinite;
+    }
+    .blob-1 {
+      width: 700px; height: 700px; top: -150px; right: -150px;
+      background: radial-gradient(circle, rgba(232,0,122,0.25), transparent 65%);
+    }
+    .blob-2 {
+      width: 450px; height: 450px; bottom: -100px; left: 10%;
+      background: radial-gradient(circle, rgba(232,0,122,0.15), transparent 65%);
+      animation-delay: -5s;
+    }
+    .blob-3 {
+      width: 350px; height: 350px; top: 35%; left: -80px;
+      background: radial-gradient(circle, rgba(0,229,200,0.12), transparent 65%);
+      animation-delay: -9s;
     }
 
-    /* Animated lines */
-    .hero-lines {
-      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    @keyframes blobFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(25px,-30px) scale(1.04); }
+      66%  { transform: translate(-18px,18px) scale(0.97); }
     }
-    .hero-lines::before, .hero-lines::after {
+
+    /* Grid */
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .hero-grid::before {
       content: '';
-      position: absolute;
-      width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent);
-      animation: lineMove 8s ease-in-out infinite;
-    }
-    .hero-lines::before { height: 60vh; top: 20%; left: 30%; animation-delay: 0s; }
-    .hero-lines::after  { height: 40vh; top: 30%; right: 25%; animation-delay: 3s; }
-
-    @keyframes lineMove {
-      0%, 100% { opacity: 0; transform: scaleY(0.8); }
-      50% { opacity: 1; transform: scaleY(1.1); }
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(232,0,122,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,0,122,0.05) 1px, transparent 1px);
+      background-size: 70px 70px;
+      mask-image: radial-gradient(ellipse 75% 75% at 60% 40%, black, transparent);
     }
 
     .hero-content {
-      position: relative; text-align: center;
-      animation: fadeUp 1.2s ease both;
+      position: relative; z-index: 2; max-width: 680px;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: rgba(232,0,122,0.1);
+      border: 1px solid rgba(232,0,122,0.35);
+      padding: 0.4rem 1rem; border-radius: 4px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--pink);
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease both;
     }
-
-    .hero-eyebrow {
-      font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 1.5rem;
-      animation: fadeUp 1.2s 0.2s ease both;
+    .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(0,229,200,0.4); }
+      50% { opacity: 0.7; transform: scale(1.3); box-shadow: 0 0 0 5px rgba(0,229,200,0); }
     }
 
     .hero-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Syne', sans-serif;
       font-size: clamp(3.5rem, 9vw, 8rem);
-      line-height: 1;
-      margin-bottom: 0.3rem;
+      font-weight: 800; line-height: 0.92;
+      letter-spacing: -0.04em; margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s 0.1s ease both;
     }
-    .hero-title em {
-      display: block;
-      font-style: italic;
-      color: var(--gold);
-      animation: fadeUp 1.2s 0.4s ease both;
+    .hero-title .pink { color: var(--pink); }
+    .hero-title .outline {
+      -webkit-text-stroke: 2px rgba(245,245,245,0.25);
+      color: transparent;
     }
 
     .hero-sub {
-      font-size: 1rem; letter-spacing: 0.1em;
-      opacity: 0.6; margin: 2rem 0 3rem;
-      animation: fadeUp 1.2s 0.6s ease both;
+      font-size: 1.05rem; color: var(--muted);
+      line-height: 1.75; max-width: 500px;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s 0.25s ease both;
     }
 
-    .btn {
-      display: inline-block; text-decoration: none;
-      padding: 1rem 2.5rem;
-      font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
-      font-weight: 500;
-      border: 1px solid var(--gold); color: var(--gold);
-      transition: background 0.3s, color 0.3s;
-      animation: fadeUp 1.2s 0.8s ease both;
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.4s ease both;
     }
-    .btn:hover { background: var(--gold); color: var(--black); }
-    .btn-fill {
-      background: var(--gold); color: var(--black);
+    .btn-main {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--grd);
+      color: #fff; text-decoration: none;
+      padding: 0.9rem 2rem; border-radius: 4px;
+      font-weight: 700; font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 30px rgba(232,0,122,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn-fill:hover { background: var(--gold-light); }
-
-    .scroll-hint {
-      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
-      color: var(--muted);
-      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    .btn-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(232,0,122,0.6);
     }
-    .scroll-hint::after {
-      content: '';
-      width: 1px; height: 50px;
-      background: linear-gradient(to bottom, var(--gold), transparent);
-      animation: scrollLine 2s ease-in-out infinite;
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--white);
+      text-decoration: none; padding: 0.9rem 2rem; border-radius: 4px;
+      font-weight: 600; font-size: 0.875rem;
+      border: 1px solid rgba(245,245,245,0.18);
+      transition: border-color 0.2s, background 0.2s;
     }
-    @keyframes scrollLine {
-      0%   { transform: scaleY(0); transform-origin: top; }
-      50%  { transform: scaleY(1); transform-origin: top; }
-      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    .btn-ghost:hover {
+      border-color: var(--pink);
+      background: rgba(232,0,122,0.08);
     }
 
-    /* ── SECTIONS ── */
-    section { padding: 8rem 4rem; }
+    /* ZDF badge */
+    .zdf-strip {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px; padding: 0.7rem 1.2rem;
+      margin-top: 2.5rem;
+      animation: fadeUp 0.8s 0.55s ease both;
+    }
+    .zdf-badge {
+      background: #f60; color: #fff;
+      font-weight: 900; font-size: 0.7rem;
+      padding: 0.2rem 0.5rem; border-radius: 3px;
+      letter-spacing: 0.05em;
+    }
+    .zdf-text { font-size: 0.78rem; color: var(--muted); }
+    .zdf-text strong { color: var(--white); }
 
-    .section-tag {
-      font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 1rem;
+    /* Floating card */
+    .hero-float {
+      position: absolute; right: 7%; top: 50%; transform: translateY(-50%);
+      z-index: 3;
+      animation: floatY 6s ease-in-out infinite, fadeUp 1s 0.6s ease both;
     }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      line-height: 1.15;
-      margin-bottom: 2rem;
+    @keyframes floatY {
+      0%, 100% { transform: translateY(-50%); }
+      50%       { transform: translateY(calc(-50% - 18px)); }
     }
-
-    .section-title em { font-style: italic; color: var(--gold); }
-
-    /* ── ABOUT ── */
-    #about {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
-      align-items: center;
+    .float-card {
+      background: rgba(14,14,14,0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(232,0,122,0.25);
+      border-radius: 12px; padding: 1.5rem 1.8rem;
+      min-width: 230px;
     }
-
-    .about-image {
-      position: relative;
+    .float-tag { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--pink); margin-bottom: 0.8rem; }
+    .float-class { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .float-time { font-size: 0.78rem; color: var(--muted); margin-bottom: 1rem; }
+    .float-pill {
+      display: inline-block;
+      background: rgba(0,229,200,0.12);
+      color: var(--cyan);
+      padding: 0.25rem 0.8rem; border-radius: 3px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
     }
-    .about-image-box {
-      width: 100%; aspect-ratio: 3/4;
-      background: var(--gray);
-      position: relative;
-      overflow: hidden;
+    .float-imgs {
+      display: flex; margin-top: 1rem;
     }
-    .about-image-box::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 60%);
-    }
-    .about-image-placeholder {
-      width: 100%; height: 100%;
+    .float-img {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--grd); margin-right: -8px;
+      border: 2px solid #0e0e0e;
       display: flex; align-items: center; justify-content: center;
-      font-size: 6rem; opacity: 0.15;
+      font-size: 0.7rem; font-weight: 700;
     }
-    .about-accent {
-      position: absolute; top: -20px; right: -20px;
-      width: 80px; height: 80px;
-      border: 1px solid var(--gold);
-      opacity: 0.4;
+    .float-img:nth-child(2) { background: linear-gradient(135deg, #00e5c8, #e8007a); }
+    .float-img:nth-child(3) { background: linear-gradient(135deg, #ff2d96, #00e5c8); }
+    .float-count { font-size: 0.72rem; color: var(--muted); margin-top: 0.6rem; }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem;
+      margin-top: 3rem; padding-top: 2rem;
+      border-top: 1px solid rgba(232,0,122,0.15);
+      animation: fadeUp 0.8s 0.5s ease both;
     }
-    .about-accent2 {
-      position: absolute; bottom: -20px; left: -20px;
-      width: 50px; height: 50px;
-      background: var(--gold);
-      opacity: 0.15;
+    .stat-n {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800; color: var(--pink);
     }
+    .stat-l { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.1rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══ MARQUEE ══ */
+    .marquee-wrap {
+      overflow: hidden; white-space: nowrap;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 0;
+      background: var(--surface);
+    }
+    .marquee-track {
+      display: inline-block;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      padding: 0 2rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(245,245,245,0.35);
+    }
+    .m-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--pink); flex-shrink: 0; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ══ SECTIONS ══ */
+    section { padding: 7rem 4rem; }
+    .s-label {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--pink);
+      border-bottom: 1px solid var(--pink);
+      padding-bottom: 3px;
+      margin-bottom: 1.2rem;
+    }
+    .s-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    .s-title .pink { color: var(--pink); }
+    .s-title .cyan { color: var(--cyan); }
+
+    /* ══ ABOUT ══ */
+    #about {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: center;
+      background: var(--surface);
+    }
+
+    .about-visual { position: relative; }
+    .about-box {
+      width: 100%; aspect-ratio: 4/5;
+      background: linear-gradient(145deg, rgba(232,0,122,0.15), rgba(8,8,8,0.9));
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8rem; overflow: hidden; position: relative;
+    }
+    .about-box::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(to top, rgba(15,15,15,0.9), transparent);
+    }
+    .about-float {
+      position: absolute; bottom: -24px; right: -24px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.2rem 1.5rem;
+      min-width: 160px;
+    }
+    .about-float-n {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800; color: var(--pink); line-height: 1;
+    }
+    .about-float-l { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; letter-spacing: 0.08em; }
 
     .about-text p {
-      color: rgba(245,240,232,0.7);
-      line-height: 1.9; font-size: 1rem;
-      margin-bottom: 1.5rem;
+      color: var(--muted); line-height: 1.85; font-size: 0.975rem;
+      margin-bottom: 1.4rem; margin-top: 1.2rem;
     }
 
-    .stats {
-      display: flex; gap: 3rem; margin-top: 3rem; padding-top: 2rem;
-      border-top: 1px solid rgba(201,168,76,0.2);
+    .feat-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.8rem; margin-top: 2rem;
     }
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem; color: var(--gold);
+    .feat {
+      background: var(--card);
+      border: 1px solid rgba(232,0,122,0.12);
+      border-radius: 8px; padding: 1rem 1.1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.83rem; font-weight: 500;
+      transition: border-color 0.25s;
     }
-    .stat-label { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; }
+    .feat:hover { border-color: rgba(232,0,122,0.4); }
+    .feat span:first-child { font-size: 1.2rem; }
 
-    /* ── CLASSES ── */
-    #classes { background: var(--gray); }
+    /* ══ CLASSES ══ */
+    .classes-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;
+    }
 
     .classes-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px;
-      margin-top: 4rem;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
     }
 
     .class-card {
-      background: var(--black);
-      padding: 3rem 2.5rem;
+      background: var(--card);
+      padding: 2.5rem 2rem;
       position: relative; overflow: hidden;
-      transition: background 0.4s;
+      transition: background 0.3s;
       cursor: default;
     }
-    .class-card::before {
+    .class-card:hover { background: #181818; }
+    .class-card::after {
       content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s ease;
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--grd);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
     }
-    .class-card:hover::before { transform: scaleX(1); }
-    .class-card:hover { background: #111; }
+    .class-card:hover::after { transform: scaleX(1); }
 
-    .class-icon {
-      font-size: 2.5rem; margin-bottom: 1.5rem; display: block;
-    }
+    .class-icon { font-size: 2.2rem; margin-bottom: 1.2rem; display: block; }
     .class-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem; margin-bottom: 0.8rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem; font-weight: 800; margin-bottom: 0.7rem;
     }
-    .class-desc {
-      font-size: 0.9rem; color: rgba(245,240,232,0.55);
-      line-height: 1.7;
-    }
-    .class-level {
+    .class-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; }
+    .class-pill {
       display: inline-block;
-      margin-top: 1.5rem;
-      font-size: 0.7rem; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.4);
-      padding: 0.3rem 0.8rem;
+      border: 1px solid rgba(232,0,122,0.3);
+      color: var(--pink);
+      padding: 0.22rem 0.75rem; border-radius: 3px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .class-main .class-pill {
+      background: rgba(232,0,122,0.12);
     }
 
-    /* ── SCHEDULE ── */
+    /* ══ ACHIEVEMENTS ══ */
+    #achievements {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .achievements-inner {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    .achiev {
+      background: var(--surface);
+      padding: 2.5rem 2rem; text-align: center;
+      transition: background 0.3s;
+    }
+    .achiev:hover { background: var(--card); }
+    .achiev-icon { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
+    .achiev-n {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem; font-weight: 800; color: var(--pink); line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .achiev-l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+
+    /* ══ SCHEDULE ══ */
     #schedule { }
 
-    .schedule-header {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 4rem; align-items: end; margin-bottom: 4rem;
+    .sched-layout {
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: 5rem; align-items: start; margin-top: 3rem;
     }
+    .sched-left p { color: var(--muted); line-height: 1.8; margin-top: 1.2rem; margin-bottom: 1.5rem; font-size: 0.925rem; }
+    .trial-box {
+      background: rgba(232,0,122,0.06);
+      border: 1px solid rgba(232,0,122,0.25);
+      border-radius: 8px; padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .trial-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .trial-box p { font-size: 0.82rem; color: var(--muted); margin: 0 0 1.2rem; }
 
-    table {
-      width: 100%; border-collapse: collapse;
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
     }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: rgba(232,0,122,0.06); }
     th {
-      font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--gold); text-align: left;
-      padding: 1rem 1.5rem; border-bottom: 1px solid rgba(201,168,76,0.2);
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--pink); font-weight: 700;
+      padding: 1rem 1.3rem; text-align: left;
+      border-bottom: 1px solid var(--border);
     }
     td {
-      padding: 1.2rem 1.5rem;
-      font-size: 0.9rem; color: rgba(245,240,232,0.75);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 0.95rem 1.3rem;
+      font-size: 0.865rem; color: rgba(245,245,245,0.75);
+      border-bottom: 1px solid rgba(232,0,122,0.06);
     }
-    tr:hover td { background: rgba(201,168,76,0.04); }
-    .badge {
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(232,0,122,0.04); }
+    .lv {
       display: inline-block;
-      padding: 0.2rem 0.7rem;
-      font-size: 0.7rem; letter-spacing: 0.1em;
-      background: rgba(201,168,76,0.12);
-      color: var(--gold);
+      padding: 0.18rem 0.65rem; border-radius: 3px;
+      font-size: 0.67rem; font-weight: 700; letter-spacing: 0.04em;
+    }
+    .lv-a { background: rgba(0,229,200,0.1); color: var(--cyan); }
+    .lv-m { background: rgba(245,245,245,0.08); color: rgba(245,245,245,0.7); }
+    .lv-f { background: rgba(232,0,122,0.12); color: var(--pink); }
+    .lv-all { background: rgba(232,0,122,0.08); color: var(--pink-2); }
+
+    /* ══ GALLERY ══ */
+    #gallery { background: var(--surface); }
+
+    .gallery-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
     }
 
-    /* ── TEAM ── */
-    #team { background: var(--gray); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 4px;
+    }
+    .g-item {
+      background: var(--card);
+      aspect-ratio: 1; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 3rem;
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(232,0,122,0.08);
+      transition: border-color 0.3s;
+    }
+    .g-item:hover { border-color: rgba(232,0,122,0.4); }
+    .g-item.g-tall { grid-row: span 2; aspect-ratio: auto; }
+    .g-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(232,0,122,0.8), transparent 50%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end;
+      padding: 1.2rem;
+    }
+    .g-item:hover .g-overlay { opacity: 1; }
+    .g-overlay span { font-size: 0.78rem; font-weight: 600; }
+
+    /* Photos from instagram — colored backgrounds */
+    .g-1 { background: linear-gradient(135deg,#1a0a10,#2a0a1c); }
+    .g-2 { background: linear-gradient(135deg,#0a0a1c,#1a0a2a); }
+    .g-3 { background: linear-gradient(135deg,#0a1a0a,#0a2a1a); }
+    .g-4 { background: linear-gradient(135deg,#1c0a0a,#2a1010); }
+    .g-5 { background: linear-gradient(135deg,#0a151a,#0a252a); }
+    .g-6 { background: linear-gradient(135deg,#1a1a0a,#2a2010); }
+    .g-7 { background: linear-gradient(135deg,#0a0a0a,#1a0a10); }
+
+    .ig-cta { text-align: center; margin-top: 2rem; }
+    .ig-cta p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
+
+    /* ══ ZDF SECTION ══ */
+    #press {
+      padding: 5rem 4rem;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .press-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 2rem;
+    }
+    .press-text .s-label { margin-bottom: 0.8rem; }
+    .press-head {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem;
+    }
+    .press-sub { font-size: 0.9rem; color: var(--muted); }
+    .press-cards { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .press-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.5rem 2rem;
+      min-width: 200px; text-align: center;
+    }
+    .press-logo {
+      font-size: 0.8rem; font-weight: 900; letter-spacing: 0.05em;
+      background: #f60; color: #fff;
+      padding: 0.3rem 0.7rem; border-radius: 4px;
+      display: inline-block; margin-bottom: 0.8rem;
+    }
+    .press-show { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .press-date { font-size: 0.75rem; color: var(--muted); }
+
+    /* ══ TEAM ══ */
+    #team { background: var(--surface); }
 
     .team-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 2rem; margin-top: 4rem;
+      gap: 1.5rem; margin-top: 3rem;
     }
-    .team-card { text-align: center; }
+    .team-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .team-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(232,0,122,0.4);
+    }
     .team-photo {
-      width: 100%; aspect-ratio: 1;
-      background: var(--black);
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, rgba(232,0,122,0.15), rgba(8,8,8,0.9));
       display: flex; align-items: center; justify-content: center;
-      font-size: 4rem; margin-bottom: 1.5rem;
-      position: relative; overflow: hidden;
+      font-size: 5rem;
     }
-    .team-photo::after {
-      content: '';
-      position: absolute; inset: 0;
-      border: 1px solid rgba(201,168,76,0.2);
+    .team-body { padding: 1.5rem; }
+    .team-name { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .team-role { font-size: 0.72rem; color: var(--pink); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .team-bio { font-size: 0.82rem; color: var(--muted); line-height: 1.65; margin-top: 0.8rem; }
+    .team-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .team-tag {
+      background: rgba(232,0,122,0.08);
+      border: 1px solid rgba(232,0,122,0.18);
+      color: var(--muted);
+      padding: 0.18rem 0.6rem; border-radius: 3px;
+      font-size: 0.67rem; font-weight: 600;
     }
-    .team-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; margin-bottom: 0.3rem;
-    }
-    .team-role { font-size: 0.8rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; }
 
-    /* ── CONTACT ── */
+    /* ══ CONTACT ══ */
     #contact {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 6rem; align-items: start;
+      gap: 5rem; align-items: start;
+    }
+    .contact-left p { color: var(--muted); line-height: 1.8; margin: 1rem 0 2rem; font-size: 0.95rem; }
+    .contact-rows { display: flex; flex-direction: column; gap: 0.8rem; }
+    .c-row {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--card); border: 1px solid rgba(232,0,122,0.1);
+      border-radius: 6px; padding: 0.9rem 1.1rem;
+      transition: border-color 0.25s;
+    }
+    .c-row:hover { border-color: rgba(232,0,122,0.35); }
+    .c-icon {
+      width: 38px; height: 38px; border-radius: 6px;
+      background: rgba(232,0,122,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .c-lbl { font-size: 0.67rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .c-val { font-size: 0.875rem; font-weight: 500; margin-top: 0.15rem; }
+
+    .contact-form {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 4px; padding: 2.5rem;
+    }
+    .contact-form h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem; font-weight: 800; margin-bottom: 0.4rem;
+    }
+    .contact-form .cf-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .fg { margin-bottom: 0.9rem; }
+    .fg input, .fg textarea, .fg select {
+      width: 100%; background: var(--surface);
+      border: 1px solid rgba(232,0,122,0.15);
+      border-radius: 6px; color: var(--white);
+      padding: 0.85rem 1rem;
+      font-family: inherit; font-size: 0.875rem;
+      outline: none; transition: border-color 0.25s;
+    }
+    .fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--pink); }
+    .fg textarea { height: 100px; resize: none; }
+    .fg input::placeholder, .fg textarea::placeholder { color: var(--muted); }
+    .fg select option { background: var(--surface); }
+    .fg-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .cf-submit {
+      width: 100%; background: var(--grd);
+      color: #fff; border: none;
+      padding: 1rem; border-radius: 4px;
+      font-family: inherit; font-size: 0.875rem; font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer; margin-top: 0.4rem;
+      box-shadow: 0 0 20px rgba(232,0,122,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cf-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(232,0,122,0.5);
     }
 
-    .contact-info p {
-      color: rgba(245,240,232,0.65); line-height: 1.9;
-      margin-bottom: 2.5rem;
-    }
-
-    .contact-detail {
-      display: flex; align-items: flex-start; gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .contact-detail-icon { font-size: 1.1rem; margin-top: 0.1rem; }
-    .contact-detail-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
-    .contact-detail-value { font-size: 0.95rem; color: rgba(245,240,232,0.8); margin-top: 0.2rem; }
-
-    form { display: flex; flex-direction: column; gap: 1.2rem; }
-    form input, form textarea {
-      background: var(--gray);
-      border: 1px solid rgba(201,168,76,0.15);
-      color: var(--white);
-      padding: 1rem 1.2rem;
-      font-family: inherit; font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-    form input:focus, form textarea:focus { border-color: var(--gold); }
-    form textarea { height: 140px; resize: none; }
-    form input::placeholder, form textarea::placeholder { color: var(--muted); }
-    form button {
-      background: var(--gold); color: var(--black);
-      border: none; padding: 1.1rem;
-      font-family: inherit; font-size: 0.85rem;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      font-weight: 500; cursor: pointer;
-      transition: background 0.3s;
-    }
-    form button:hover { background: var(--gold-light); }
-
-    /* ── FOOTER ── */
+    /* ══ FOOTER ══ */
     footer {
-      padding: 3rem 4rem;
-      border-top: 1px solid rgba(201,168,76,0.15);
-      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 4rem;
     }
-    footer p { font-size: 0.8rem; color: var(--muted); }
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; color: var(--gold);
+    .footer-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;
     }
-    .social-links { display: flex; gap: 1.5rem; }
-    .social-links a {
-      font-size: 0.75rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--muted);
-      text-decoration: none; transition: color 0.3s;
+    .f-copy { font-size: 0.78rem; color: var(--muted); }
+    .f-links { display: flex; gap: 2rem; }
+    .f-links a {
+      font-size: 0.78rem; color: var(--muted);
+      text-decoration: none; transition: color 0.2s;
     }
-    .social-links a:hover { color: var(--gold); }
+    .f-links a:hover { color: var(--pink); }
+    .f-ig {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--grd); color: #fff;
+      text-decoration: none; padding: 0.5rem 1.1rem; border-radius: 3px;
+      font-size: 0.78rem; font-weight: 700;
+      transition: transform 0.2s;
+    }
+    .f-ig:hover { transform: translateY(-2px); }
 
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      nav ul { display: none; }
-      section { padding: 5rem 1.5rem; }
-      #about { grid-template-columns: 1fr; gap: 3rem; }
-      .classes-grid { grid-template-columns: 1fr; }
-      .team-grid { grid-template-columns: 1fr 1fr; }
-      #contact { grid-template-columns: 1fr; gap: 3rem; }
-      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
-      .schedule-header { grid-template-columns: 1fr; }
-      .stats { gap: 2rem; }
-    }
-
-    /* ── SCROLL ANIMATIONS ── */
+    /* ══ REVEAL ══ */
     .reveal {
-      opacity: 0; transform: translateY(24px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
     .reveal.visible { opacity: 1; transform: none; }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 1100px) {
+      .hero-float { display: none; }
+      .achievements-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .classes-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+      .g-item.g-tall { grid-row: span 1; aspect-ratio: 1; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { display: none; }
+      .hamburger { display: flex; }
+      section, #press { padding: 4rem 1.5rem; }
+      #hero { padding: 6rem 1.5rem 3rem; }
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .achievements-inner { grid-template-columns: repeat(2, 1fr); }
+      .classes-grid { grid-template-columns: 1fr; }
+      .sched-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      #contact { grid-template-columns: 1fr; gap: 2.5rem; }
+      .fg-2 { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .press-inner { flex-direction: column; }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      .classes-top { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .achievements-inner { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">JDS <span>Dance Studio</span></div>
+<!-- ══ NAV ══ -->
+<nav id="navbar">
+  <div>
+    <div class="logo">JDS<span class="dot">.</span></div>
+    <span class="logo-sub">Janina Dance Studio</span>
+  </div>
   <ul>
-    <li><a href="#about">Über uns</a></li>
+    <li><a href="#about">Studio</a></li>
     <li><a href="#classes">Kurse</a></li>
     <li><a href="#schedule">Stundenplan</a></li>
     <li><a href="#team">Team</a></li>
-    <li><a href="#contact" class="nav-cta">Kontakt</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact" class="nav-pill">Probestunde →</a></li>
   </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
 
-<!-- HERO -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">Studio</a>
+  <a href="#classes" onclick="closeMenu()">Kurse</a>
+  <a href="#schedule" onclick="closeMenu()">Stundenplan</a>
+  <a href="#team" onclick="closeMenu()">Team</a>
+  <a href="#gallery" onclick="closeMenu()">Gallery</a>
+  <a href="#contact" onclick="closeMenu()">Probestunde buchen</a>
+</div>
+
+<!-- ══ HERO ══ -->
 <section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-lines"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-grid"></div>
+
   <div class="hero-content">
-    <p class="hero-eyebrow">Vaihingen an der Enz · Seit 2025</p>
+    <div class="hero-badge">
+      <span class="live-dot"></span>
+      Vaihingen/Enz — Jetzt Probestunde sichern
+    </div>
     <h1 class="hero-title">
-      Die Kunst<br>
-      <em>des Tanzes</em>
+      Janina<br>
+      <span class="pink">Dance</span><br>
+      <span class="outline">Studio.</span>
     </h1>
-    <p class="hero-sub">Ballet · Hip Hop · Contemporary · Latin</p>
-    <a href="#classes" class="btn">Kurse entdecken</a>
+    <p class="hero-sub">
+      Hip Hop. Breaking. Contemporary. Latin. — Für alle, die Tanz nicht nur fühlen, sondern leben wollen. Von Kindern bis Erwachsene. Von Anfänger bis Meisterschaft.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-main">Probestunde buchen ✨</a>
+      <a href="#classes" class="btn-ghost">Alle Kurse ansehen →</a>
+    </div>
+    <div class="zdf-strip">
+      <span class="zdf-badge">ZDF</span>
+      <span class="zdf-text"><strong>Wir waren im TV!</strong> — Die Giovanni Zarrella Show &amp; Große Weihnachtsshow 2025</span>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-n">200+</div>
+        <div class="stat-l">Aktive Schüler</div>
+      </div>
+      <div>
+        <div class="stat-n">8+</div>
+        <div class="stat-l">Tanzstile</div>
+      </div>
+      <div>
+        <div class="stat-n">10+</div>
+        <div class="stat-l">Jahre Erfahrung</div>
+      </div>
+    </div>
   </div>
-  <div class="scroll-hint">Scroll</div>
+
+  <!-- Floating card -->
+  <div class="hero-float">
+    <div class="float-card">
+      <div class="float-tag">🔥 Beliebt</div>
+      <div class="float-class">Hip Hop Teens</div>
+      <div class="float-time">Montag · 18:00–19:30 Uhr</div>
+      <span class="float-pill">Plätze verfügbar</span>
+      <div class="float-imgs">
+        <div class="float-img">A</div>
+        <div class="float-img">J</div>
+        <div class="float-img">K</div>
+      </div>
+      <div class="float-count">+14 Teilnehmer diesen Monat</div>
+    </div>
+  </div>
 </section>
 
-<!-- ABOUT -->
+<!-- ══ MARQUEE ══ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="m-dot"></span>Hip Hop</span>
+    <span class="marquee-item"><span class="m-dot"></span>Breaking</span>
+    <span class="marquee-item"><span class="m-dot"></span>Ballett</span>
+    <span class="marquee-item"><span class="m-dot"></span>Contemporary</span>
+    <span class="marquee-item"><span class="m-dot"></span>Latin & Salsa</span>
+    <span class="marquee-item"><span class="m-dot"></span>Jazz & Musical</span>
+    <span class="marquee-item"><span class="m-dot"></span>Kindertanz</span>
+    <span class="marquee-item"><span class="m-dot"></span>Meisterschaftstraining</span>
+    <span class="marquee-item"><span class="m-dot"></span>Hip Hop</span>
+    <span class="marquee-item"><span class="m-dot"></span>Breaking</span>
+    <span class="marquee-item"><span class="m-dot"></span>Ballett</span>
+    <span class="marquee-item"><span class="m-dot"></span>Contemporary</span>
+    <span class="marquee-item"><span class="m-dot"></span>Latin & Salsa</span>
+    <span class="marquee-item"><span class="m-dot"></span>Jazz & Musical</span>
+    <span class="marquee-item"><span class="m-dot"></span>Kindertanz</span>
+    <span class="marquee-item"><span class="m-dot"></span>Meisterschaftstraining</span>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
 <section id="about">
-  <div class="about-image reveal">
-    <div class="about-image-box">
-      <div class="about-image-placeholder">💃</div>
+  <div class="about-visual reveal">
+    <div class="about-box">
+      <span style="position:relative;z-index:1;font-size:8rem">💃</span>
     </div>
-    <div class="about-accent"></div>
-    <div class="about-accent2"></div>
+    <div class="about-float">
+      <div class="about-float-n">🏆</div>
+      <div class="about-float-n" style="font-size:1.6rem">Meister</div>
+      <div class="about-float-l">DHBC Hiphop Champion</div>
+    </div>
   </div>
   <div class="about-text">
-    <p class="section-tag reveal">Über uns</p>
-    <h2 class="section-title reveal">Leidenschaft.<br><em>Disziplin. Freude.</em></h2>
-    <p class="reveal">JDS Dance Studio steht für qualitativ hochwertige Tanzausbildung in einem herzlichen und professionellen Umfeld. Von der ersten Choreografie bis zur Bühnenperformance begleiten wir unsere Schüler auf jedem Schritt ihres Weges.</p>
-    <p class="reveal">Unsere erfahrenen Trainer verbinden technische Präzision mit künstlerischem Ausdruck — für jede Altersgruppe und jedes Niveau. Tanz ist für uns mehr als Bewegung: Es ist eine Sprache, die jeder sprechen kann.</p>
-    <div class="stats reveal">
-      <div>
-        <div class="stat-num">200+</div>
-        <div class="stat-label">Schüler</div>
-      </div>
-      <div>
-        <div class="stat-num">8</div>
-        <div class="stat-label">Tanzstile</div>
-      </div>
-      <div>
-        <div class="stat-num">10+</div>
-        <div class="stat-label">Jahre Erfahrung</div>
-      </div>
+    <div class="s-label reveal">Über uns</div>
+    <h2 class="s-title reveal">JDS. ist mehr als<br><span class="pink">eine Tanzschule</span></h2>
+    <p class="reveal">
+      Gegründet von Janina in Vaihingen/Enz, ist das Janina Dance Studio ein Ort, wo Leidenschaft auf Disziplin trifft. Wir trainieren nicht nur Schritte — wir formen Charaktere.
+    </p>
+    <p class="reveal">
+      Von Kindertanz über Hip Hop Meisterschaftstraining bis zu nationalen TV-Auftritten bei ZDF — JDS. steht für echte Qualität, Community und Bühnenperformance auf höchstem Niveau.
+    </p>
+    <div class="feat-grid reveal">
+      <div class="feat"><span>🎯</span><span>Meisterschaftstraining</span></div>
+      <div class="feat"><span>📺</span><span>ZDF TV-Auftritte</span></div>
+      <div class="feat"><span>🌍</span><span>Alle Niveaus willkommen</span></div>
+      <div class="feat"><span>✨</span><span>Erstkurs gratis</span></div>
     </div>
   </div>
 </section>
 
-<!-- CLASSES -->
+<!-- ══ ACHIEVEMENTS ══ -->
+<section id="achievements" style="padding: 5rem 4rem;">
+  <div class="achievements-inner">
+    <div class="achiev reveal">
+      <span class="achiev-icon">🏆</span>
+      <div class="achiev-n">1.</div>
+      <div class="achiev-l">DHBC Hiphop Meisterschaft</div>
+    </div>
+    <div class="achiev reveal">
+      <span class="achiev-icon">📺</span>
+      <div class="achiev-n">ZDF</div>
+      <div class="achiev-l">Giovanni Zarrella Show</div>
+    </div>
+    <div class="achiev reveal">
+      <span class="achiev-icon">🎭</span>
+      <div class="achiev-n">200+</div>
+      <div class="achiev-l">Aktive Schülerinnen & Schüler</div>
+    </div>
+    <div class="achiev reveal">
+      <span class="achiev-icon">📅</span>
+      <div class="achiev-n">10+</div>
+      <div class="achiev-l">Jahre Bühnenerfahrung</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLASSES ══ -->
 <section id="classes">
-  <div style="text-align:center">
-    <p class="section-tag reveal">Was wir anbieten</p>
-    <h2 class="section-title reveal">Unsere <em>Kurse</em></h2>
+  <div class="classes-top">
+    <div>
+      <div class="s-label reveal">Kursangebot</div>
+      <h2 class="s-title reveal">Finde deinen <span class="pink">Style</span></h2>
+    </div>
+    <a href="#contact" class="btn-ghost reveal" style="white-space:nowrap">Beratung anfragen →</a>
   </div>
   <div class="classes-grid">
+    <div class="class-card class-main reveal">
+      <span class="class-icon">🎤</span>
+      <div class="class-name">Hip Hop</div>
+      <p class="class-desc">Unser Herzstück. Street Styles, Choreografien, Meisterschaftstraining. Energie, Ausdruck, Community. Von Kids bis Erwachsene.</p>
+      <span class="class-pill">Alle Niveaus · Meisterschaft</span>
+    </div>
+    <div class="class-card reveal">
+      <span class="class-icon">🤸</span>
+      <div class="class-name">Breaking</div>
+      <p class="class-desc">B-Boy & B-Girl Grundlagen bis Competition Level. Power Moves, Footwork, Freezes — die Urform des Hip Hop.</p>
+      <span class="class-pill">Ab Anfänger</span>
+    </div>
     <div class="class-card reveal">
       <span class="class-icon">🩰</span>
       <div class="class-name">Ballett</div>
-      <p class="class-desc">Klassische Technik, Körperhaltung und Ausdruck. Für Kinder ab 4 Jahren bis Erwachsene. Aufbaukurse und Leistungsklassen verfügbar.</p>
-      <span class="class-level">Alle Niveaus</span>
-    </div>
-    <div class="class-card reveal">
-      <span class="class-icon">🎤</span>
-      <div class="class-name">Hip Hop</div>
-      <p class="class-desc">Street Styles, Breaking, Popping & Locking. Energie, Rhythmus und persönlicher Ausdruck im Mittelpunkt.</p>
-      <span class="class-level">Anfänger – Fortgeschritten</span>
+      <p class="class-desc">Klassische Technik als Fundament. Körperhaltung, Koordination, Ausdruck. Für Kinder ab 4 Jahren und Erwachsene.</p>
+      <span class="class-pill">Ab 4 Jahren</span>
     </div>
     <div class="class-card reveal">
       <span class="class-icon">🎭</span>
       <div class="class-name">Contemporary</div>
-      <p class="class-desc">Moderne Tanzkunst, die Körper und Emotion verbindet. Improvisationsarbeit und Kompositionstechniken.</p>
-      <span class="class-level">Ab Mittelstufe</span>
+      <p class="class-desc">Moderne Tanzkunst zwischen Technik und Emotion. Improvisation, Komposition, persönlicher Ausdruck.</p>
+      <span class="class-pill">Ab Mittelstufe</span>
     </div>
     <div class="class-card reveal">
       <span class="class-icon">🌹</span>
       <div class="class-name">Latin & Salsa</div>
-      <p class="class-desc">Temperament, Rhythmus und Lebensfreude. Salsa, Bachata, Merengue — einzeln oder mit Partner.</p>
-      <span class="class-level">Alle Niveaus</span>
+      <p class="class-desc">Feuer, Rhythmus, Lebensfreude. Salsa, Bachata, Merengue — solo oder mit Partner. Für alle Niveaus.</p>
+      <span class="class-pill">Alle Niveaus</span>
     </div>
     <div class="class-card reveal">
-      <span class="class-icon">✨</span>
-      <div class="class-name">Jazz & Musical</div>
-      <p class="class-desc">Show-Tanz mit theatralem Flair. Technik aus Ballett und modernem Tanz kombiniert mit Performance-Energie.</p>
-      <span class="class-level">Kinder & Teens</span>
-    </div>
-    <div class="class-card reveal">
-      <span class="class-icon">🧘</span>
+      <span class="class-icon">🧒</span>
       <div class="class-name">Kindertanz</div>
-      <p class="class-desc">Spielerische Bewegungserziehung für die Kleinsten. Rhythmusgefühl, Koordination und Kreativität durch Tanz.</p>
-      <span class="class-level">Ab 3 Jahren</span>
+      <p class="class-desc">Spielerisch Rhythmus und Kreativität entdecken. Speziell für die Kleinsten ab 3 Jahren — Spaß an Bewegung im Mittelpunkt.</p>
+      <span class="class-pill">Ab 3 Jahren</span>
     </div>
   </div>
 </section>
 
-<!-- SCHEDULE -->
+<!-- ══ ZDF / PRESS ══ -->
+<section id="press">
+  <div class="press-inner">
+    <div class="press-text">
+      <div class="s-label">TV & Medien</div>
+      <div class="press-head">JDS. war im <span style="color:var(--pink)">Fernsehen</span> 📺</div>
+      <div class="press-sub">Wir sind stolz — unsere Crew war 2025 gleich zweimal live auf ZDF!</div>
+    </div>
+    <div class="press-cards">
+      <div class="press-card reveal">
+        <span class="press-logo">ZDF</span>
+        <div class="press-show">Giovanni Zarrella Show</div>
+        <div class="press-date">22. November 2025 · 20:15 Uhr</div>
+      </div>
+      <div class="press-card reveal">
+        <span class="press-logo">ZDF</span>
+        <div class="press-show">Die Große Weihnachtsshow</div>
+        <div class="press-date">04. Dezember 2025 · 20:15 Uhr</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SCHEDULE ══ -->
 <section id="schedule">
-  <div class="schedule-header">
-    <div>
-      <p class="section-tag reveal">Stundenplan</p>
-      <h2 class="section-title reveal">Aktuelle <em>Kurse</em></h2>
+  <div class="s-label reveal">Wochenplan</div>
+  <h2 class="s-title reveal">Aktuelle <span class="pink">Kurszeiten</span></h2>
+  <div class="sched-layout">
+    <div class="sched-left">
+      <p>Neue Teilnehmer können jederzeit einsteigen. Der erste Kurs ist kostenlos und unverbindlich — einfach anmelden und ausprobieren.</p>
+      <div class="trial-box">
+        <div class="trial-title">🎁 Probestunde gratis</div>
+        <p>Keine Verpflichtung, kein Risiko. Einfach mitkommen und Spaß haben.</p>
+        <a href="#contact" class="btn-main" style="font-size:0.8rem; padding:0.7rem 1.4rem;">Jetzt anmelden</a>
+      </div>
     </div>
-    <div class="reveal">
-      <p style="color:rgba(245,240,232,0.6); font-size:0.9rem; line-height:1.7">Probelektion kostenlos — meld dich einfach an und schau rein!</p>
+    <div class="table-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>Tag</th>
+            <th>Uhrzeit</th>
+            <th>Kurs</th>
+            <th>Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Montag</td><td>09:00–10:00</td><td>Kindertanz</td><td><span class="lv lv-a">Anfänger</span></td></tr>
+          <tr><td>Montag</td><td>18:00–19:30</td><td>Hip Hop Teens</td><td><span class="lv lv-m">Mittel</span></td></tr>
+          <tr><td>Dienstag</td><td>10:00–11:00</td><td>Ballett Kinder</td><td><span class="lv lv-a">Anfänger</span></td></tr>
+          <tr><td>Dienstag</td><td>17:30–19:00</td><td>Contemporary</td><td><span class="lv lv-f">Fortgeschritten</span></td></tr>
+          <tr><td>Mittwoch</td><td>18:00–19:30</td><td>Breaking / B-Boy</td><td><span class="lv lv-all">Alle Niveaus</span></td></tr>
+          <tr><td>Donnerstag</td><td>09:30–11:00</td><td>Ballett Erwachsene</td><td><span class="lv lv-m">Mittel</span></td></tr>
+          <tr><td>Freitag</td><td>17:00–18:30</td><td>Hip Hop Meisterschaft</td><td><span class="lv lv-f">Fortgeschritten</span></td></tr>
+          <tr><td>Samstag</td><td>10:00–12:00</td><td>Hip Hop Kids</td><td><span class="lv lv-a">Anfänger</span></td></tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-  <div class="reveal">
-    <table>
-      <thead>
-        <tr>
-          <th>Tag</th>
-          <th>Uhrzeit</th>
-          <th>Kurs</th>
-          <th>Level</th>
-          <th>Trainer</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Montag</td><td>09:00 – 10:00</td><td>Kindertanz</td><td><span class="badge">Anfänger</span></td><td>— </td></tr>
-        <tr><td>Montag</td><td>18:00 – 19:30</td><td>Hip Hop Teens</td><td><span class="badge">Mittel</span></td><td>— </td></tr>
-        <tr><td>Dienstag</td><td>10:00 – 11:00</td><td>Ballett Kinder</td><td><span class="badge">Anfänger</span></td><td>— </td></tr>
-        <tr><td>Dienstag</td><td>17:30 – 19:00</td><td>Contemporary</td><td><span class="badge">Fortgeschritten</span></td><td>— </td></tr>
-        <tr><td>Mittwoch</td><td>18:00 – 19:30</td><td>Latin & Salsa</td><td><span class="badge">Alle</span></td><td>— </td></tr>
-        <tr><td>Donnerstag</td><td>09:30 – 11:00</td><td>Ballett Erwachsene</td><td><span class="badge">Mittel</span></td><td>— </td></tr>
-        <tr><td>Freitag</td><td>17:00 – 18:30</td><td>Jazz & Musical</td><td><span class="badge">Teens</span></td><td>— </td></tr>
-        <tr><td>Samstag</td><td>10:00 – 12:00</td><td>Hip Hop Kids</td><td><span class="badge">Anfänger</span></td><td>— </td></tr>
-      </tbody>
-    </table>
   </div>
 </section>
 
-<!-- TEAM -->
+<!-- ══ GALLERY ══ -->
+<section id="gallery">
+  <div class="gallery-top">
+    <div>
+      <div class="s-label reveal">Community</div>
+      <h2 class="s-title reveal">Behind the <span class="pink">Scenes</span></h2>
+    </div>
+    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" class="btn-main reveal" style="font-size:0.8rem; padding:0.7rem 1.4rem;">📸 @jds.dancestudio</a>
+  </div>
+  <div class="gallery-grid">
+    <div class="g-item g-tall g-1 reveal">
+      <span>🎤</span>
+      <div class="g-overlay"><span>Hip Hop Showcase</span></div>
+    </div>
+    <div class="g-item g-2 reveal">
+      <span>🤸</span>
+      <div class="g-overlay"><span>Breaking Training</span></div>
+    </div>
+    <div class="g-item g-3 reveal">
+      <span>🏆</span>
+      <div class="g-overlay"><span>DHBC Meisterschaft</span></div>
+    </div>
+    <div class="g-item g-4 reveal">
+      <span>📺</span>
+      <div class="g-overlay"><span>ZDF Auftritt</span></div>
+    </div>
+    <div class="g-item g-5 reveal">
+      <span>🎭</span>
+      <div class="g-overlay"><span>Vaihinger Straßenfest</span></div>
+    </div>
+    <div class="g-item g-6 reveal">
+      <span>🧒</span>
+      <div class="g-overlay"><span>Kids Show</span></div>
+    </div>
+    <div class="g-item g-7 reveal">
+      <span>👥</span>
+      <div class="g-overlay"><span>JDS. Team</span></div>
+    </div>
+  </div>
+  <div class="ig-cta reveal">
+    <p>Mehr Videos, Reels und Fotos auf Instagram — folg uns!</p>
+    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" class="btn-ghost">@jds.dancestudio → Instagram</a>
+  </div>
+</section>
+
+<!-- ══ TEAM ══ -->
 <section id="team">
-  <div style="text-align:center">
-    <p class="section-tag reveal">Unser Team</p>
-    <h2 class="section-title reveal">Die <em>Trainer</em></h2>
+  <div style="text-align:center; margin-bottom:3rem">
+    <div class="s-label reveal">Das Team</div>
+    <h2 class="s-title reveal">Hinter <span class="pink">JDS.</span></h2>
   </div>
   <div class="team-grid">
     <div class="team-card reveal">
       <div class="team-photo">💃</div>
-      <div class="team-name">Jessica D.</div>
-      <div class="team-role">Leiterin · Ballett & Contemporary</div>
+      <div class="team-body">
+        <div class="team-name">Janina</div>
+        <div class="team-role">Gründerin & Head Coach</div>
+        <div class="team-bio">Janina hat JDS. gegründet und zu einer der bekanntesten Tanzschulen der Region gemacht. TV-Erfahrung, Wettkampferfolge und ein Herz fürs Tanzen.</div>
+        <div class="team-tags">
+          <span class="team-tag">Hip Hop</span>
+          <span class="team-tag">Contemporary</span>
+          <span class="team-tag">Meisterschaft</span>
+        </div>
+      </div>
     </div>
     <div class="team-card reveal">
       <div class="team-photo">🕺</div>
-      <div class="team-name">Trainer Name</div>
-      <div class="team-role">Hip Hop · Street Dance</div>
+      <div class="team-body">
+        <div class="team-name">Trainer</div>
+        <div class="team-role">Breaking & Street Coach</div>
+        <div class="team-bio">Aus der B-Boy-Szene kommend, bringt er authentisches Straßenfeeling in jede Einheit. Power Moves, Footwork, Cypher-Kultur.</div>
+        <div class="team-tags">
+          <span class="team-tag">Breaking</span>
+          <span class="team-tag">Hip Hop</span>
+          <span class="team-tag">Popping</span>
+        </div>
+      </div>
     </div>
     <div class="team-card reveal">
       <div class="team-photo">🌹</div>
-      <div class="team-name">Trainer Name</div>
-      <div class="team-role">Latin · Salsa · Bachata</div>
+      <div class="team-body">
+        <div class="team-name">Trainerin</div>
+        <div class="team-role">Latin & Kindertanz Coach</div>
+        <div class="team-bio">Leidenschaft und Rhythmus sind ihre Sprache. Von Kindertanz bis Salsa — sie sorgt für gute Laune und echte Fortschritte.</div>
+        <div class="team-tags">
+          <span class="team-tag">Salsa</span>
+          <span class="team-tag">Bachata</span>
+          <span class="team-tag">Kindertanz</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ══ CONTACT ══ -->
 <section id="contact">
-  <div class="contact-info">
-    <p class="section-tag reveal">Kontakt</p>
-    <h2 class="section-title reveal">Komm zum <em>Probekurs</em></h2>
-    <p class="reveal">Wir freuen uns auf dich! Schreib uns, ruf uns an oder komm einfach vorbei. Die erste Stunde ist kostenlos — kein Risiko, nur Tanz.</p>
-    <div class="contact-detail reveal">
-      <div class="contact-detail-icon">📍</div>
-      <div>
-        <div class="contact-detail-label">Adresse</div>
-        <div class="contact-detail-value">Musterstraße 1, 71665 Vaihingen/Enz</div>
+  <div class="contact-left">
+    <div class="s-label reveal">Kontakt</div>
+    <h2 class="s-title reveal">Dein erster <span class="pink">Schritt</span> beginnt hier</h2>
+    <p class="reveal">Komm einfach vorbei, schreib uns, oder ruf an. Die erste Stunde ist kostenlos. Kein Vertrag, kein Risiko — einfach Tanz.</p>
+    <div class="contact-rows">
+      <div class="c-row reveal">
+        <div class="c-icon">📍</div>
+        <div>
+          <div class="c-lbl">Adresse</div>
+          <div class="c-val">Musterstraße 1, 71665 Vaihingen/Enz</div>
+        </div>
       </div>
-    </div>
-    <div class="contact-detail reveal">
-      <div class="contact-detail-icon">📞</div>
-      <div>
-        <div class="contact-detail-label">Telefon</div>
-        <div class="contact-detail-value">+49 (0) 123 456 789</div>
+      <div class="c-row reveal">
+        <div class="c-icon">📞</div>
+        <div>
+          <div class="c-lbl">Telefon</div>
+          <div class="c-val">+49 (0) 123 456 789</div>
+        </div>
       </div>
-    </div>
-    <div class="contact-detail reveal">
-      <div class="contact-detail-icon">✉️</div>
-      <div>
-        <div class="contact-detail-label">E-Mail</div>
-        <div class="contact-detail-value">info@jds-dancestudio.de</div>
+      <div class="c-row reveal">
+        <div class="c-icon">✉️</div>
+        <div>
+          <div class="c-lbl">E-Mail</div>
+          <div class="c-val">info@jds-dancestudio.de</div>
+        </div>
       </div>
-    </div>
-    <div class="contact-detail reveal">
-      <div class="contact-detail-icon">🕐</div>
-      <div>
-        <div class="contact-detail-label">Öffnungszeiten</div>
-        <div class="contact-detail-value">Mo–Fr 09:00–20:00 · Sa 09:00–14:00</div>
+      <div class="c-row reveal">
+        <div class="c-icon">🕐</div>
+        <div>
+          <div class="c-lbl">Öffnungszeiten</div>
+          <div class="c-val">Mo–Fr 09:00–20:00 · Sa 09:00–14:00</div>
+        </div>
+      </div>
+      <div class="c-row reveal">
+        <div class="c-icon">📸</div>
+        <div>
+          <div class="c-lbl">Instagram</div>
+          <div class="c-val">
+            <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" style="color:var(--pink); text-decoration:none; font-weight:600">@jds.dancestudio</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="reveal">
+  <div class="contact-form reveal">
+    <h3>Probestunde buchen ✨</h3>
+    <div class="cf-sub">Kostenlos, unverbindlich, einfach Spaß haben.</div>
     <form onsubmit="handleSubmit(event)">
-      <input type="text" placeholder="Dein Name" required>
-      <input type="email" placeholder="E-Mail Adresse" required>
-      <input type="tel" placeholder="Telefon (optional)">
-      <textarea placeholder="Welcher Kurs interessiert dich? Fragen?"></textarea>
-      <button type="submit">Nachricht senden →</button>
+      <div class="fg-2">
+        <div class="fg"><input type="text" placeholder="Vorname" required></div>
+        <div class="fg"><input type="text" placeholder="Nachname" required></div>
+      </div>
+      <div class="fg"><input type="email" placeholder="E-Mail Adresse" required></div>
+      <div class="fg"><input type="tel" placeholder="Telefon (optional)"></div>
+      <div class="fg">
+        <select>
+          <option value="" disabled selected>Welcher Kurs interessiert dich?</option>
+          <option>Hip Hop</option>
+          <option>Breaking / B-Boy</option>
+          <option>Ballett</option>
+          <option>Contemporary</option>
+          <option>Latin & Salsa</option>
+          <option>Kindertanz</option>
+          <option>Meisterschaftstraining</option>
+          <option>Noch nicht sicher — Beratung gewünscht</option>
+        </select>
+      </div>
+      <div class="fg"><textarea placeholder="Fragen oder Anmerkungen?"></textarea></div>
+      <button type="submit" class="cf-submit" id="submitBtn">Jetzt Probestunde sichern →</button>
     </form>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ══ FOOTER ══ -->
 <footer>
-  <div class="footer-logo">JDS Dance Studio</div>
-  <p>© 2025 JDS Dance Studio · Alle Rechte vorbehalten</p>
-  <div class="social-links">
-    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank">Instagram</a>
-    <a href="#">Facebook</a>
+  <div class="footer-inner">
+    <div>
+      <div class="logo" style="font-size:1.4rem">JDS<span class="dot">.</span></div>
+      <div class="logo-sub" style="font-size:0.6rem; color:rgba(245,245,245,0.35); letter-spacing:0.25em; display:block; margin-top:2px">Janina Dance Studio · Vaihingen/Enz</div>
+    </div>
+    <p class="f-copy">© 2025 JDS. Janina Dance Studio · Alle Rechte vorbehalten</p>
+    <div class="f-links">
+      <a href="#">Impressum</a>
+      <a href="#">Datenschutz</a>
+    </div>
+    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" class="f-ig">📸 Instagram</a>
   </div>
 </footer>
 
 <script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
   // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        observer.unobserve(entry.target);
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 55);
+        observer.unobserve(e.target);
       }
     });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Compact nav
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    nav.style.padding = window.scrollY > 60
+      ? '0.75rem 4rem'
+      : '1.2rem 4rem';
+  });
 
   // Form
   function handleSubmit(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.textContent = '✓ Gesendet!';
-    btn.style.background = '#4a7c59';
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = '✓ Anfrage gesendet! Wir melden uns bald.';
+    btn.style.background = 'linear-gradient(135deg, #15803d, #16a34a)';
+    btn.style.boxShadow = '0 0 20px rgba(22,163,74,0.35)';
     setTimeout(() => {
-      btn.textContent = 'Nachricht senden →';
+      btn.textContent = 'Jetzt Probestunde sichern →';
       btn.style.background = '';
+      btn.style.boxShadow = '';
       e.target.reset();
-    }, 3000);
+    }, 4000);
   }
 </script>
-
 </body>
 </html>
