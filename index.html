@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JDS Dance Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --white: #f5f0e8;
+      --gray: #1a1a1a;
+      --muted: #888;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 4rem;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+      backdrop-filter: blur(4px);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+    }
+
+    .logo span { font-style: italic; color: var(--white); }
+
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a {
+      text-decoration: none; color: var(--white);
+      font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;
+      opacity: 0.8; transition: opacity 0.3s, color 0.3s;
+    }
+    nav ul a:hover { opacity: 1; color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold); color: var(--black) !important;
+      padding: 0.6rem 1.4rem; border-radius: 2px;
+      font-weight: 500; opacity: 1 !important;
+      transition: background 0.3s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      background: var(--black);
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 60%, rgba(201,168,76,0.05) 0%, transparent 60%);
+    }
+
+    /* Animated lines */
+    .hero-lines {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .hero-lines::before, .hero-lines::after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent);
+      animation: lineMove 8s ease-in-out infinite;
+    }
+    .hero-lines::before { height: 60vh; top: 20%; left: 30%; animation-delay: 0s; }
+    .hero-lines::after  { height: 40vh; top: 30%; right: 25%; animation-delay: 3s; }
+
+    @keyframes lineMove {
+      0%, 100% { opacity: 0; transform: scaleY(0.8); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    .hero-content {
+      position: relative; text-align: center;
+      animation: fadeUp 1.2s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+      animation: fadeUp 1.2s 0.2s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .hero-title em {
+      display: block;
+      font-style: italic;
+      color: var(--gold);
+      animation: fadeUp 1.2s 0.4s ease both;
+    }
+
+    .hero-sub {
+      font-size: 1rem; letter-spacing: 0.1em;
+      opacity: 0.6; margin: 2rem 0 3rem;
+      animation: fadeUp 1.2s 0.6s ease both;
+    }
+
+    .btn {
+      display: inline-block; text-decoration: none;
+      padding: 1rem 2.5rem;
+      font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+      font-weight: 500;
+      border: 1px solid var(--gold); color: var(--gold);
+      transition: background 0.3s, color 0.3s;
+      animation: fadeUp 1.2s 0.8s ease both;
+    }
+    .btn:hover { background: var(--gold); color: var(--black); }
+    .btn-fill {
+      background: var(--gold); color: var(--black);
+    }
+    .btn-fill:hover { background: var(--gold-light); }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 8rem 4rem; }
+
+    .section-tag {
+      font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.15;
+      margin-bottom: 2rem;
+    }
+
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+      align-items: center;
+    }
+
+    .about-image {
+      position: relative;
+    }
+    .about-image-box {
+      width: 100%; aspect-ratio: 3/4;
+      background: var(--gray);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 60%);
+    }
+    .about-image-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem; opacity: 0.15;
+    }
+    .about-accent {
+      position: absolute; top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      border: 1px solid var(--gold);
+      opacity: 0.4;
+    }
+    .about-accent2 {
+      position: absolute; bottom: -20px; left: -20px;
+      width: 50px; height: 50px;
+      background: var(--gold);
+      opacity: 0.15;
+    }
+
+    .about-text p {
+      color: rgba(245,240,232,0.7);
+      line-height: 1.9; font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats {
+      display: flex; gap: 3rem; margin-top: 3rem; padding-top: 2rem;
+      border-top: 1px solid rgba(201,168,76,0.2);
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; color: var(--gold);
+    }
+    .stat-label { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; }
+
+    /* ── CLASSES ── */
+    #classes { background: var(--gray); }
+
+    .classes-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px;
+      margin-top: 4rem;
+    }
+
+    .class-card {
+      background: var(--black);
+      padding: 3rem 2.5rem;
+      position: relative; overflow: hidden;
+      transition: background 0.4s;
+      cursor: default;
+    }
+    .class-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .class-card:hover::before { transform: scaleX(1); }
+    .class-card:hover { background: #111; }
+
+    .class-icon {
+      font-size: 2.5rem; margin-bottom: 1.5rem; display: block;
+    }
+    .class-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; margin-bottom: 0.8rem;
+    }
+    .class-desc {
+      font-size: 0.9rem; color: rgba(245,240,232,0.55);
+      line-height: 1.7;
+    }
+    .class-level {
+      display: inline-block;
+      margin-top: 1.5rem;
+      font-size: 0.7rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 0.3rem 0.8rem;
+    }
+
+    /* ── SCHEDULE ── */
+    #schedule { }
+
+    .schedule-header {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: end; margin-bottom: 4rem;
+    }
+
+    table {
+      width: 100%; border-collapse: collapse;
+    }
+    th {
+      font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); text-align: left;
+      padding: 1rem 1.5rem; border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+    td {
+      padding: 1.2rem 1.5rem;
+      font-size: 0.9rem; color: rgba(245,240,232,0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    tr:hover td { background: rgba(201,168,76,0.04); }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.7rem; letter-spacing: 0.1em;
+      background: rgba(201,168,76,0.12);
+      color: var(--gold);
+    }
+
+    /* ── TEAM ── */
+    #team { background: var(--gray); }
+
+    .team-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2rem; margin-top: 4rem;
+    }
+    .team-card { text-align: center; }
+    .team-photo {
+      width: 100%; aspect-ratio: 1;
+      background: var(--black);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; margin-bottom: 1.5rem;
+      position: relative; overflow: hidden;
+    }
+    .team-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .team-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; margin-bottom: 0.3rem;
+    }
+    .team-role { font-size: 0.8rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; }
+
+    /* ── CONTACT ── */
+    #contact {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: start;
+    }
+
+    .contact-info p {
+      color: rgba(245,240,232,0.65); line-height: 1.9;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .contact-detail-icon { font-size: 1.1rem; margin-top: 0.1rem; }
+    .contact-detail-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+    .contact-detail-value { font-size: 0.95rem; color: rgba(245,240,232,0.8); margin-top: 0.2rem; }
+
+    form { display: flex; flex-direction: column; gap: 1.2rem; }
+    form input, form textarea {
+      background: var(--gray);
+      border: 1px solid rgba(201,168,76,0.15);
+      color: var(--white);
+      padding: 1rem 1.2rem;
+      font-family: inherit; font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    form input:focus, form textarea:focus { border-color: var(--gold); }
+    form textarea { height: 140px; resize: none; }
+    form input::placeholder, form textarea::placeholder { color: var(--muted); }
+    form button {
+      background: var(--gold); color: var(--black);
+      border: none; padding: 1.1rem;
+      font-family: inherit; font-size: 0.85rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      font-weight: 500; cursor: pointer;
+      transition: background 0.3s;
+    }
+    form button:hover { background: var(--gold-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 4rem;
+      border-top: 1px solid rgba(201,168,76,0.15);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    footer p { font-size: 0.8rem; color: var(--muted); }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--gold);
+    }
+    .social-links { display: flex; gap: 1.5rem; }
+    .social-links a {
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      text-decoration: none; transition: color 0.3s;
+    }
+    .social-links a:hover { color: var(--gold); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      nav ul { display: none; }
+      section { padding: 5rem 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .classes-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      #contact { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .schedule-header { grid-template-columns: 1fr; }
+      .stats { gap: 2rem; }
+    }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">JDS <span>Dance Studio</span></div>
+  <ul>
+    <li><a href="#about">Über uns</a></li>
+    <li><a href="#classes">Kurse</a></li>
+    <li><a href="#schedule">Stundenplan</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact" class="nav-cta">Kontakt</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Vaihingen an der Enz · Seit 2015</p>
+    <h1 class="hero-title">
+      Die Kunst<br>
+      <em>des Tanzes</em>
+    </h1>
+    <p class="hero-sub">Ballet · Hip Hop · Contemporary · Latin</p>
+    <a href="#classes" class="btn">Kurse entdecken</a>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-image reveal">
+    <div class="about-image-box">
+      <div class="about-image-placeholder">💃</div>
+    </div>
+    <div class="about-accent"></div>
+    <div class="about-accent2"></div>
+  </div>
+  <div class="about-text">
+    <p class="section-tag reveal">Über uns</p>
+    <h2 class="section-title reveal">Leidenschaft.<br><em>Disziplin. Freude.</em></h2>
+    <p class="reveal">JDS Dance Studio steht für qualitativ hochwertige Tanzausbildung in einem herzlichen und professionellen Umfeld. Von der ersten Choreografie bis zur Bühnenperformance begleiten wir unsere Schüler auf jedem Schritt ihres Weges.</p>
+    <p class="reveal">Unsere erfahrenen Trainer verbinden technische Präzision mit künstlerischem Ausdruck — für jede Altersgruppe und jedes Niveau. Tanz ist für uns mehr als Bewegung: Es ist eine Sprache, die jeder sprechen kann.</p>
+    <div class="stats reveal">
+      <div>
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Schüler</div>
+      </div>
+      <div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">Tanzstile</div>
+      </div>
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Jahre Erfahrung</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLASSES -->
+<section id="classes">
+  <div style="text-align:center">
+    <p class="section-tag reveal">Was wir anbieten</p>
+    <h2 class="section-title reveal">Unsere <em>Kurse</em></h2>
+  </div>
+  <div class="classes-grid">
+    <div class="class-card reveal">
+      <span class="class-icon">🩰</span>
+      <div class="class-name">Ballett</div>
+      <p class="class-desc">Klassische Technik, Körperhaltung und Ausdruck. Für Kinder ab 4 Jahren bis Erwachsene. Aufbaukurse und Leistungsklassen verfügbar.</p>
+      <span class="class-level">Alle Niveaus</span>
+    </div>
+    <div class="class-card reveal">
+      <span class="class-icon">🎤</span>
+      <div class="class-name">Hip Hop</div>
+      <p class="class-desc">Street Styles, Breaking, Popping & Locking. Energie, Rhythmus und persönlicher Ausdruck im Mittelpunkt.</p>
+      <span class="class-level">Anfänger – Fortgeschritten</span>
+    </div>
+    <div class="class-card reveal">
+      <span class="class-icon">🎭</span>
+      <div class="class-name">Contemporary</div>
+      <p class="class-desc">Moderne Tanzkunst, die Körper und Emotion verbindet. Improvisationsarbeit und Kompositionstechniken.</p>
+      <span class="class-level">Ab Mittelstufe</span>
+    </div>
+    <div class="class-card reveal">
+      <span class="class-icon">🌹</span>
+      <div class="class-name">Latin & Salsa</div>
+      <p class="class-desc">Temperament, Rhythmus und Lebensfreude. Salsa, Bachata, Merengue — einzeln oder mit Partner.</p>
+      <span class="class-level">Alle Niveaus</span>
+    </div>
+    <div class="class-card reveal">
+      <span class="class-icon">✨</span>
+      <div class="class-name">Jazz & Musical</div>
+      <p class="class-desc">Show-Tanz mit theatralem Flair. Technik aus Ballett und modernem Tanz kombiniert mit Performance-Energie.</p>
+      <span class="class-level">Kinder & Teens</span>
+    </div>
+    <div class="class-card reveal">
+      <span class="class-icon">🧘</span>
+      <div class="class-name">Kindertanz</div>
+      <p class="class-desc">Spielerische Bewegungserziehung für die Kleinsten. Rhythmusgefühl, Koordination und Kreativität durch Tanz.</p>
+      <span class="class-level">Ab 3 Jahren</span>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="schedule-header">
+    <div>
+      <p class="section-tag reveal">Stundenplan</p>
+      <h2 class="section-title reveal">Aktuelle <em>Kurse</em></h2>
+    </div>
+    <div class="reveal">
+      <p style="color:rgba(245,240,232,0.6); font-size:0.9rem; line-height:1.7">Probelektion kostenlos — meld dich einfach an und schau rein!</p>
+    </div>
+  </div>
+  <div class="reveal">
+    <table>
+      <thead>
+        <tr>
+          <th>Tag</th>
+          <th>Uhrzeit</th>
+          <th>Kurs</th>
+          <th>Level</th>
+          <th>Trainer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Montag</td><td>09:00 – 10:00</td><td>Kindertanz</td><td><span class="badge">Anfänger</span></td><td>— </td></tr>
+        <tr><td>Montag</td><td>18:00 – 19:30</td><td>Hip Hop Teens</td><td><span class="badge">Mittel</span></td><td>— </td></tr>
+        <tr><td>Dienstag</td><td>10:00 – 11:00</td><td>Ballett Kinder</td><td><span class="badge">Anfänger</span></td><td>— </td></tr>
+        <tr><td>Dienstag</td><td>17:30 – 19:00</td><td>Contemporary</td><td><span class="badge">Fortgeschritten</span></td><td>— </td></tr>
+        <tr><td>Mittwoch</td><td>18:00 – 19:30</td><td>Latin & Salsa</td><td><span class="badge">Alle</span></td><td>— </td></tr>
+        <tr><td>Donnerstag</td><td>09:30 – 11:00</td><td>Ballett Erwachsene</td><td><span class="badge">Mittel</span></td><td>— </td></tr>
+        <tr><td>Freitag</td><td>17:00 – 18:30</td><td>Jazz & Musical</td><td><span class="badge">Teens</span></td><td>— </td></tr>
+        <tr><td>Samstag</td><td>10:00 – 12:00</td><td>Hip Hop Kids</td><td><span class="badge">Anfänger</span></td><td>— </td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div style="text-align:center">
+    <p class="section-tag reveal">Unser Team</p>
+    <h2 class="section-title reveal">Die <em>Trainer</em></h2>
+  </div>
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="team-photo">💃</div>
+      <div class="team-name">Jessica D.</div>
+      <div class="team-role">Leiterin · Ballett & Contemporary</div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-photo">🕺</div>
+      <div class="team-name">Trainer Name</div>
+      <div class="team-role">Hip Hop · Street Dance</div>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-photo">🌹</div>
+      <div class="team-name">Trainer Name</div>
+      <div class="team-role">Latin · Salsa · Bachata</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-tag reveal">Kontakt</p>
+    <h2 class="section-title reveal">Komm zum <em>Probekurs</em></h2>
+    <p class="reveal">Wir freuen uns auf dich! Schreib uns, ruf uns an oder komm einfach vorbei. Die erste Stunde ist kostenlos — kein Risiko, nur Tanz.</p>
+    <div class="contact-detail reveal">
+      <div class="contact-detail-icon">📍</div>
+      <div>
+        <div class="contact-detail-label">Adresse</div>
+        <div class="contact-detail-value">Musterstraße 1, 71665 Vaihingen/Enz</div>
+      </div>
+    </div>
+    <div class="contact-detail reveal">
+      <div class="contact-detail-icon">📞</div>
+      <div>
+        <div class="contact-detail-label">Telefon</div>
+        <div class="contact-detail-value">+49 (0) 123 456 789</div>
+      </div>
+    </div>
+    <div class="contact-detail reveal">
+      <div class="contact-detail-icon">✉️</div>
+      <div>
+        <div class="contact-detail-label">E-Mail</div>
+        <div class="contact-detail-value">info@jds-dancestudio.de</div>
+      </div>
+    </div>
+    <div class="contact-detail reveal">
+      <div class="contact-detail-icon">🕐</div>
+      <div>
+        <div class="contact-detail-label">Öffnungszeiten</div>
+        <div class="contact-detail-value">Mo–Fr 09:00–20:00 · Sa 09:00–14:00</div>
+      </div>
+    </div>
+  </div>
+  <div class="reveal">
+    <form onsubmit="handleSubmit(event)">
+      <input type="text" placeholder="Dein Name" required>
+      <input type="email" placeholder="E-Mail Adresse" required>
+      <input type="tel" placeholder="Telefon (optional)">
+      <textarea placeholder="Welcher Kurs interessiert dich? Fragen?"></textarea>
+      <button type="submit">Nachricht senden →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">JDS Dance Studio</div>
+  <p>© 2025 JDS Dance Studio · Alle Rechte vorbehalten</p>
+  <div class="social-links">
+    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank">Instagram</a>
+    <a href="#">Facebook</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = '✓ Gesendet!';
+    btn.style.background = '#4a7c59';
+    setTimeout(() => {
+      btn.textContent = 'Nachricht senden →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
