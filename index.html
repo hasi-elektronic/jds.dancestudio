@@ -1,13 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="description" content="JDS. Janina Dance Studio in Vaihingen/Enz — Hip Hop, Breaking, Ballett, Contemporary, Latin. Probestunde gratis. Bekannt aus ZDF." />
+  <meta name="theme-color" content="#080808" />
+  <meta property="og:title" content="JDS. Janina Dance Studio — Vaihingen/Enz" />
+  <meta property="og:description" content="Hip Hop. Breaking. Contemporary. Latin. — Probestunde gratis buchen." />
+  <meta property="og:type" content="website" />
   <title>JDS. Janina Dance Studio — Vaihingen/Enz</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <style>
+    /* ══════════════════════════════════════════════
+       DESIGN TOKENS
+       ══════════════════════════════════════════════ */
     :root {
       --bg:       #080808;
       --surface:  #0f0f0f;
@@ -19,62 +27,103 @@
       --muted:    rgba(245,245,245,0.45);
       --border:   rgba(232,0,122,0.18);
       --grd:      linear-gradient(135deg, var(--pink), var(--pink-2));
+      --radius:   6px;
+      --radius-lg: 12px;
+      --shadow-glow: 0 0 30px rgba(232,0,122,0.4);
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      /* Safe areas for notched devices */
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
     }
 
+    /* ══════════════════════════════════════════════
+       RESET & BASE
+       ══════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
       background: var(--bg);
       color: var(--white);
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+    body.menu-open { overflow: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
 
+    /* Scrollbar */
     ::-webkit-scrollbar { width: 3px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--pink); }
+    ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 3px; }
 
-    /* ══ NAV ══ */
+    /* Focus visible for keyboard navigation */
+    :focus-visible {
+      outline: 2px solid var(--pink);
+      outline-offset: 2px;
+    }
+
+    /* ══════════════════════════════════════════════
+       NAVIGATION
+       ══════════════════════════════════════════════ */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 999;
       display: flex; align-items: center; justify-content: space-between;
       padding: 1.2rem 4rem;
+      padding-top: calc(1.2rem + var(--safe-top));
       backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
       background: rgba(8,8,8,0.85);
       border-bottom: 1px solid var(--border);
-      transition: padding 0.3s;
+      transition: padding var(--transition), background var(--transition);
     }
-
+    nav.scrolled {
+      padding-top: calc(0.7rem + var(--safe-top));
+      padding-bottom: 0.7rem;
+      background: rgba(8,8,8,0.95);
+    }
+    .logo-wrap { flex-shrink: 0; }
     .logo {
       font-family: 'Syne', sans-serif;
       font-size: 1.8rem; font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--white);
+      line-height: 1;
     }
     .logo .dot { color: var(--pink); }
     .logo-sub {
       font-size: 0.55rem; font-weight: 400;
       letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--muted); display: block; margin-top: -4px;
+      color: var(--muted); display: block; margin-top: 1px;
     }
-
-    nav ul { list-style: none; display: flex; gap: 2rem; align-items: center; }
-    nav ul a {
+    .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
       text-decoration: none; color: var(--white);
       font-size: 0.85rem; font-weight: 500;
-      opacity: 0.65; transition: opacity 0.2s, color 0.2s;
+      opacity: 0.65; transition: opacity var(--transition), color var(--transition);
+      position: relative;
     }
-    nav ul a:hover { opacity: 1; color: var(--pink); }
-
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1.5px; background: var(--pink);
+      transform: scaleX(0); transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--pink); }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
     .nav-pill {
       background: var(--grd) !important;
       color: #fff !important; opacity: 1 !important;
-      padding: 0.55rem 1.4rem; border-radius: 4px;
+      padding: 0.55rem 1.4rem; border-radius: var(--radius);
       font-weight: 700 !important;
-      transition: transform 0.2s, box-shadow 0.2s !important;
-      box-shadow: 0 0 20px rgba(232,0,122,0.4);
+      transition: transform var(--transition), box-shadow var(--transition) !important;
+      box-shadow: var(--shadow-glow);
     }
+    .nav-pill::after { display: none !important; }
     .nav-pill:hover {
       transform: translateY(-2px);
       box-shadow: 0 0 35px rgba(232,0,122,0.6) !important;
@@ -83,44 +132,81 @@
     /* Hamburger */
     .hamburger {
       display: none; flex-direction: column; gap: 5px;
-      cursor: pointer; padding: 8px;
+      cursor: pointer; padding: 10px;
+      background: none; border: none;
+      -webkit-tap-highlight-color: transparent;
     }
     .hamburger span {
-      display: block; width: 24px; height: 2px;
+      display: block; width: 22px; height: 2px;
       background: var(--white); border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
+      transition: transform 0.3s ease, opacity 0.2s ease;
     }
     .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+    /* Mobile menu */
     .mobile-menu {
-      display: none; position: fixed;
-      top: 65px; left: 0; right: 0; z-index: 998;
-      background: rgba(8,8,8,0.98); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      flex-direction: column; padding: 1.5rem 2rem; gap: 1.2rem;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 998;
+      background: rgba(8,8,8,0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      gap: 0.5rem;
+      padding: 2rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
     }
-    .mobile-menu.open { display: flex; }
+    .mobile-menu.open { opacity: 1; visibility: visible; }
     .mobile-menu a {
       text-decoration: none; color: var(--white);
-      font-size: 1.1rem; font-weight: 500;
-      padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--radius);
+      transition: color var(--transition), background var(--transition);
+      opacity: 0; transform: translateY(20px);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-menu.open a {
+      opacity: 1; transform: translateY(0);
+    }
+    .mobile-menu a:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu a:nth-child(2) { transition-delay: 0.1s; }
+    .mobile-menu a:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu a:nth-child(4) { transition-delay: 0.2s; }
+    .mobile-menu a:nth-child(5) { transition-delay: 0.25s; }
+    .mobile-menu a:nth-child(6) { transition-delay: 0.3s; }
+    .mobile-menu a:hover { color: var(--pink); background: rgba(232,0,122,0.06); }
+    .mobile-menu .mobile-cta {
+      margin-top: 1rem;
+      background: var(--grd);
+      color: #fff;
+      padding: 0.9rem 2.5rem;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-glow);
     }
 
-    /* ══ HERO ══ */
+    /* ══════════════════════════════════════════════
+       HERO
+       ══════════════════════════════════════════════ */
     #hero {
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex; align-items: center;
       position: relative; overflow: hidden;
-      padding: 8rem 4rem 5rem;
+      padding: calc(6rem + var(--safe-top)) 4rem 5rem;
     }
-
-    /* Animated blobs */
     .blob {
       position: absolute; border-radius: 50%;
       filter: blur(90px); pointer-events: none;
       animation: blobFloat 14s ease-in-out infinite;
+      will-change: transform;
     }
     .blob-1 {
       width: 700px; height: 700px; top: -150px; right: -150px;
@@ -136,14 +222,11 @@
       background: radial-gradient(circle, rgba(0,229,200,0.12), transparent 65%);
       animation-delay: -9s;
     }
-
     @keyframes blobFloat {
       0%, 100% { transform: translate(0,0) scale(1); }
       33%  { transform: translate(25px,-30px) scale(1.04); }
       66%  { transform: translate(-18px,18px) scale(0.97); }
     }
-
-    /* Grid */
     .hero-grid {
       position: absolute; inset: 0; pointer-events: none;
     }
@@ -155,17 +238,16 @@
         linear-gradient(90deg, rgba(232,0,122,0.05) 1px, transparent 1px);
       background-size: 70px 70px;
       mask-image: radial-gradient(ellipse 75% 75% at 60% 40%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 75% 75% at 60% 40%, black, transparent);
     }
-
     .hero-content {
       position: relative; z-index: 2; max-width: 680px;
     }
-
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.6rem;
-      background: rgba(232,0,122,0.1);
-      border: 1px solid rgba(232,0,122,0.35);
-      padding: 0.4rem 1rem; border-radius: 4px;
+      background: rgba(232,0,122,0.08);
+      border: 1px solid rgba(232,0,122,0.3);
+      padding: 0.4rem 1rem; border-radius: var(--radius);
       font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em;
       text-transform: uppercase; color: var(--pink);
       margin-bottom: 2rem;
@@ -175,15 +257,15 @@
       width: 7px; height: 7px; border-radius: 50%;
       background: var(--cyan);
       animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(0,229,200,0.4); }
       50% { opacity: 0.7; transform: scale(1.3); box-shadow: 0 0 0 5px rgba(0,229,200,0); }
     }
-
     .hero-title {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-size: clamp(3rem, 8vw, 7.5rem);
       font-weight: 800; line-height: 0.92;
       letter-spacing: -0.04em; margin-bottom: 1.5rem;
       animation: fadeUp 0.8s 0.1s ease both;
@@ -193,51 +275,56 @@
       -webkit-text-stroke: 2px rgba(245,245,245,0.25);
       color: transparent;
     }
-
     .hero-sub {
       font-size: 1.05rem; color: var(--muted);
       line-height: 1.75; max-width: 500px;
       margin-bottom: 2.5rem;
       animation: fadeUp 0.8s 0.25s ease both;
     }
-
     .hero-actions {
       display: flex; gap: 1rem; flex-wrap: wrap;
       animation: fadeUp 0.8s 0.4s ease both;
     }
+    /* Buttons */
     .btn-main {
       display: inline-flex; align-items: center; gap: 0.5rem;
       background: var(--grd);
       color: #fff; text-decoration: none;
-      padding: 0.9rem 2rem; border-radius: 4px;
+      padding: 0.9rem 2rem; border-radius: var(--radius);
       font-weight: 700; font-size: 0.875rem;
       letter-spacing: 0.02em;
-      box-shadow: 0 0 30px rgba(232,0,122,0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow-glow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      -webkit-tap-highlight-color: transparent;
     }
     .btn-main:hover {
       transform: translateY(-2px);
       box-shadow: 0 0 50px rgba(232,0,122,0.6);
     }
+    .btn-main:active { transform: translateY(0); }
     .btn-ghost {
       display: inline-flex; align-items: center; gap: 0.5rem;
       background: transparent; color: var(--white);
-      text-decoration: none; padding: 0.9rem 2rem; border-radius: 4px;
+      text-decoration: none; padding: 0.9rem 2rem; border-radius: var(--radius);
       font-weight: 600; font-size: 0.875rem;
       border: 1px solid rgba(245,245,245,0.18);
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color var(--transition), background var(--transition), transform var(--transition);
+      -webkit-tap-highlight-color: transparent;
     }
     .btn-ghost:hover {
       border-color: var(--pink);
       background: rgba(232,0,122,0.08);
+      transform: translateY(-2px);
     }
+    .btn-ghost:active { transform: translateY(0); }
 
     /* ZDF badge */
     .zdf-strip {
       display: inline-flex; align-items: center; gap: 0.7rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 4px; padding: 0.7rem 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 0.7rem 1.2rem;
       margin-top: 2.5rem;
       animation: fadeUp 0.8s 0.55s ease both;
     }
@@ -245,7 +332,7 @@
       background: #f60; color: #fff;
       font-weight: 900; font-size: 0.7rem;
       padding: 0.2rem 0.5rem; border-radius: 3px;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.05em; flex-shrink: 0;
     }
     .zdf-text { font-size: 0.78rem; color: var(--muted); }
     .zdf-text strong { color: var(--white); }
@@ -263,8 +350,9 @@
     .float-card {
       background: rgba(14,14,14,0.9);
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(232,0,122,0.25);
-      border-radius: 12px; padding: 1.5rem 1.8rem;
+      border-radius: var(--radius-lg); padding: 1.5rem 1.8rem;
       min-width: 230px;
     }
     .float-tag { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--pink); margin-bottom: 0.8rem; }
@@ -277,9 +365,7 @@
       padding: 0.25rem 0.8rem; border-radius: 3px;
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
     }
-    .float-imgs {
-      display: flex; margin-top: 1rem;
-    }
+    .float-imgs { display: flex; margin-top: 1rem; }
     .float-img {
       width: 28px; height: 28px; border-radius: 50%;
       background: var(--grd); margin-right: -8px;
@@ -291,6 +377,7 @@
     .float-img:nth-child(3) { background: linear-gradient(135deg, #ff2d96, #00e5c8); }
     .float-count { font-size: 0.72rem; color: var(--muted); margin-top: 0.6rem; }
 
+    /* Hero stats */
     .hero-stats {
       display: flex; gap: 2.5rem;
       margin-top: 3rem; padding-top: 2rem;
@@ -302,13 +389,14 @@
       font-size: 2rem; font-weight: 800; color: var(--pink);
     }
     .stat-l { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.1rem; }
-
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(22px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ══ MARQUEE ══ */
+    /* ══════════════════════════════════════════════
+       MARQUEE
+       ══════════════════════════════════════════════ */
     .marquee-wrap {
       overflow: hidden; white-space: nowrap;
       border-top: 1px solid var(--border);
@@ -317,8 +405,8 @@
       background: var(--surface);
     }
     .marquee-track {
-      display: inline-block;
-      animation: marquee 22s linear infinite;
+      display: inline-flex;
+      animation: marquee 28s linear infinite;
     }
     .marquee-item {
       display: inline-flex; align-items: center; gap: 0.8rem;
@@ -327,6 +415,7 @@
       font-size: 0.9rem; font-weight: 700;
       letter-spacing: 0.08em; text-transform: uppercase;
       color: rgba(245,245,245,0.35);
+      white-space: nowrap;
     }
     .m-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--pink); flex-shrink: 0; }
     @keyframes marquee {
@@ -334,8 +423,14 @@
       to   { transform: translateX(-50%); }
     }
 
-    /* ══ SECTIONS ══ */
-    section { padding: 7rem 4rem; }
+    /* ══════════════════════════════════════════════
+       SHARED SECTION STYLES
+       ══════════════════════════════════════════════ */
+    section {
+      padding: 7rem 4rem;
+      padding-left: calc(4rem + var(--safe-left));
+      padding-right: calc(4rem + var(--safe-right));
+    }
     .s-label {
       display: inline-block;
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
@@ -354,19 +449,20 @@
     .s-title .pink { color: var(--pink); }
     .s-title .cyan { color: var(--cyan); }
 
-    /* ══ ABOUT ══ */
+    /* ══════════════════════════════════════════════
+       ABOUT
+       ══════════════════════════════════════════════ */
     #about {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 6rem; align-items: center;
+      gap: 5rem; align-items: center;
       background: var(--surface);
     }
-
     .about-visual { position: relative; }
     .about-box {
       width: 100%; aspect-ratio: 4/5;
       background: linear-gradient(145deg, rgba(232,0,122,0.15), rgba(8,8,8,0.9));
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: var(--radius);
       display: flex; align-items: center; justify-content: center;
       font-size: 8rem; overflow: hidden; position: relative;
     }
@@ -378,7 +474,7 @@
     .about-float {
       position: absolute; bottom: -24px; right: -24px;
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 8px; padding: 1.2rem 1.5rem;
+      border-radius: var(--radius-lg); padding: 1.2rem 1.5rem;
       min-width: 160px;
     }
     .about-float-n {
@@ -386,12 +482,10 @@
       font-size: 2rem; font-weight: 800; color: var(--pink); line-height: 1;
     }
     .about-float-l { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; letter-spacing: 0.08em; }
-
     .about-text p {
       color: var(--muted); line-height: 1.85; font-size: 0.975rem;
       margin-bottom: 1.4rem; margin-top: 1.2rem;
     }
-
     .feat-grid {
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 0.8rem; margin-top: 2rem;
@@ -399,31 +493,58 @@
     .feat {
       background: var(--card);
       border: 1px solid rgba(232,0,122,0.12);
-      border-radius: 8px; padding: 1rem 1.1rem;
+      border-radius: var(--radius-lg); padding: 1rem 1.1rem;
       display: flex; align-items: center; gap: 0.8rem;
       font-size: 0.83rem; font-weight: 500;
-      transition: border-color 0.25s;
+      transition: border-color var(--transition), transform var(--transition);
     }
-    .feat:hover { border-color: rgba(232,0,122,0.4); }
+    .feat:hover { border-color: rgba(232,0,122,0.4); transform: translateY(-2px); }
     .feat span:first-child { font-size: 1.2rem; }
 
-    /* ══ CLASSES ══ */
+    /* ══════════════════════════════════════════════
+       ACHIEVEMENTS
+       ══════════════════════════════════════════════ */
+    #achievements {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 4rem;
+    }
+    .achievements-inner {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    .achiev {
+      background: var(--surface);
+      padding: 2.5rem 2rem; text-align: center;
+      transition: background var(--transition);
+    }
+    .achiev:hover { background: var(--card); }
+    .achiev-icon { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
+    .achiev-n {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem; font-weight: 800; color: var(--pink); line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .achiev-l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+
+    /* ══════════════════════════════════════════════
+       CLASSES
+       ══════════════════════════════════════════════ */
     .classes-top {
       display: flex; justify-content: space-between;
       align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;
     }
-
     .classes-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 1px; background: var(--border);
       border: 1px solid var(--border);
     }
-
     .class-card {
       background: var(--card);
       padding: 2.5rem 2rem;
       position: relative; overflow: hidden;
-      transition: background 0.3s;
+      transition: background var(--transition);
       cursor: default;
     }
     .class-card:hover { background: #181818; }
@@ -432,10 +553,9 @@
       position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: var(--grd);
       transform: scaleX(0); transform-origin: left;
-      transition: transform 0.4s;
+      transition: transform 0.4s ease;
     }
     .class-card:hover::after { transform: scaleX(1); }
-
     .class-icon { font-size: 2.2rem; margin-bottom: 1.2rem; display: block; }
     .class-name {
       font-family: 'Syne', sans-serif;
@@ -449,129 +569,11 @@
       padding: 0.22rem 0.75rem; border-radius: 3px;
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
     }
-    .class-main .class-pill {
-      background: rgba(232,0,122,0.12);
-    }
+    .class-main .class-pill { background: rgba(232,0,122,0.12); }
 
-    /* ══ ACHIEVEMENTS ══ */
-    #achievements {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .achievements-inner {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 1px; background: var(--border);
-    }
-    .achiev {
-      background: var(--surface);
-      padding: 2.5rem 2rem; text-align: center;
-      transition: background 0.3s;
-    }
-    .achiev:hover { background: var(--card); }
-    .achiev-icon { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
-    .achiev-n {
-      font-family: 'Syne', sans-serif;
-      font-size: 2.5rem; font-weight: 800; color: var(--pink); line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-    .achiev-l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
-
-    /* ══ SCHEDULE ══ */
-    #schedule { }
-
-    .sched-layout {
-      display: grid; grid-template-columns: 1fr 2fr;
-      gap: 5rem; align-items: start; margin-top: 3rem;
-    }
-    .sched-left p { color: var(--muted); line-height: 1.8; margin-top: 1.2rem; margin-bottom: 1.5rem; font-size: 0.925rem; }
-    .trial-box {
-      background: rgba(232,0,122,0.06);
-      border: 1px solid rgba(232,0,122,0.25);
-      border-radius: 8px; padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .trial-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .trial-box p { font-size: 0.82rem; color: var(--muted); margin: 0 0 1.2rem; }
-
-    .table-wrap {
-      border: 1px solid var(--border);
-      border-radius: 4px; overflow: hidden;
-    }
-    table { width: 100%; border-collapse: collapse; }
-    thead { background: rgba(232,0,122,0.06); }
-    th {
-      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--pink); font-weight: 700;
-      padding: 1rem 1.3rem; text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-    td {
-      padding: 0.95rem 1.3rem;
-      font-size: 0.865rem; color: rgba(245,245,245,0.75);
-      border-bottom: 1px solid rgba(232,0,122,0.06);
-    }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover td { background: rgba(232,0,122,0.04); }
-    .lv {
-      display: inline-block;
-      padding: 0.18rem 0.65rem; border-radius: 3px;
-      font-size: 0.67rem; font-weight: 700; letter-spacing: 0.04em;
-    }
-    .lv-a { background: rgba(0,229,200,0.1); color: var(--cyan); }
-    .lv-m { background: rgba(245,245,245,0.08); color: rgba(245,245,245,0.7); }
-    .lv-f { background: rgba(232,0,122,0.12); color: var(--pink); }
-    .lv-all { background: rgba(232,0,122,0.08); color: var(--pink-2); }
-
-    /* ══ GALLERY ══ */
-    #gallery { background: var(--surface); }
-
-    .gallery-top {
-      display: flex; justify-content: space-between;
-      align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      grid-template-rows: auto auto;
-      gap: 4px;
-    }
-    .g-item {
-      background: var(--card);
-      aspect-ratio: 1; display: flex;
-      align-items: center; justify-content: center;
-      font-size: 3rem;
-      position: relative; overflow: hidden;
-      cursor: pointer;
-      border: 1px solid rgba(232,0,122,0.08);
-      transition: border-color 0.3s;
-    }
-    .g-item:hover { border-color: rgba(232,0,122,0.4); }
-    .g-item.g-tall { grid-row: span 2; aspect-ratio: auto; }
-    .g-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(232,0,122,0.8), transparent 50%);
-      opacity: 0; transition: opacity 0.3s;
-      display: flex; align-items: flex-end;
-      padding: 1.2rem;
-    }
-    .g-item:hover .g-overlay { opacity: 1; }
-    .g-overlay span { font-size: 0.78rem; font-weight: 600; }
-
-    /* Photos from instagram — colored backgrounds */
-    .g-1 { background: linear-gradient(135deg,#1a0a10,#2a0a1c); }
-    .g-2 { background: linear-gradient(135deg,#0a0a1c,#1a0a2a); }
-    .g-3 { background: linear-gradient(135deg,#0a1a0a,#0a2a1a); }
-    .g-4 { background: linear-gradient(135deg,#1c0a0a,#2a1010); }
-    .g-5 { background: linear-gradient(135deg,#0a151a,#0a252a); }
-    .g-6 { background: linear-gradient(135deg,#1a1a0a,#2a2010); }
-    .g-7 { background: linear-gradient(135deg,#0a0a0a,#1a0a10); }
-
-    .ig-cta { text-align: center; margin-top: 2rem; }
-    .ig-cta p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
-
-    /* ══ ZDF SECTION ══ */
+    /* ══════════════════════════════════════════════
+       PRESS / TV
+       ══════════════════════════════════════════════ */
     #press {
       padding: 5rem 4rem;
       background: var(--bg);
@@ -590,9 +592,11 @@
     .press-cards { display: flex; gap: 1.5rem; flex-wrap: wrap; }
     .press-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 8px; padding: 1.5rem 2rem;
+      border-radius: var(--radius-lg); padding: 1.5rem 2rem;
       min-width: 200px; text-align: center;
+      transition: border-color var(--transition), transform var(--transition);
     }
+    .press-card:hover { border-color: rgba(232,0,122,0.4); transform: translateY(-3px); }
     .press-logo {
       font-size: 0.8rem; font-weight: 900; letter-spacing: 0.05em;
       background: #f60; color: #fff;
@@ -602,17 +606,135 @@
     .press-show { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.3rem; }
     .press-date { font-size: 0.75rem; color: var(--muted); }
 
-    /* ══ TEAM ══ */
-    #team { background: var(--surface); }
+    /* ══════════════════════════════════════════════
+       SCHEDULE
+       ══════════════════════════════════════════════ */
+    .sched-layout {
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: 5rem; align-items: start; margin-top: 3rem;
+    }
+    .sched-left p { color: var(--muted); line-height: 1.8; margin-top: 1.2rem; margin-bottom: 1.5rem; font-size: 0.925rem; }
+    .trial-box {
+      background: rgba(232,0,122,0.06);
+      border: 1px solid rgba(232,0,122,0.25);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .trial-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .trial-box p { font-size: 0.82rem; color: var(--muted); margin: 0 0 1.2rem; }
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: rgba(232,0,122,0.06); }
+    th {
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--pink); font-weight: 700;
+      padding: 1rem 1.3rem; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.95rem 1.3rem;
+      font-size: 0.865rem; color: rgba(245,245,245,0.75);
+      border-bottom: 1px solid rgba(232,0,122,0.06);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background var(--transition); }
+    tbody tr:hover td { background: rgba(232,0,122,0.04); }
+    .lv {
+      display: inline-block;
+      padding: 0.18rem 0.65rem; border-radius: 3px;
+      font-size: 0.67rem; font-weight: 700; letter-spacing: 0.04em;
+    }
+    .lv-a { background: rgba(0,229,200,0.1); color: var(--cyan); }
+    .lv-m { background: rgba(245,245,245,0.08); color: rgba(245,245,245,0.7); }
+    .lv-f { background: rgba(232,0,122,0.12); color: var(--pink); }
+    .lv-all { background: rgba(232,0,122,0.08); color: var(--pink-2); }
 
+    /* Mobile schedule cards (hidden on desktop) */
+    .sched-cards { display: none; }
+    .sched-card {
+      background: var(--card);
+      border: 1px solid rgba(232,0,122,0.12);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem 1.4rem;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem;
+      transition: border-color var(--transition);
+    }
+    .sched-card:hover { border-color: rgba(232,0,122,0.35); }
+    .sched-card-left { flex: 1; min-width: 0; }
+    .sched-card-day {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--pink); margin-bottom: 0.3rem;
+    }
+    .sched-card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sched-card-time { font-size: 0.78rem; color: var(--muted); }
+    .sched-card-right { flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════
+       GALLERY
+       ══════════════════════════════════════════════ */
+    #gallery { background: var(--surface); }
+    .gallery-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 4px;
+    }
+    .g-item {
+      background: var(--card);
+      aspect-ratio: 1; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 3rem;
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(232,0,122,0.08);
+      transition: border-color 0.3s ease;
+    }
+    .g-item:hover { border-color: rgba(232,0,122,0.4); }
+    .g-item.g-tall { grid-row: span 2; aspect-ratio: auto; }
+    .g-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(232,0,122,0.8), transparent 50%);
+      opacity: 0; transition: opacity 0.3s ease;
+      display: flex; align-items: flex-end;
+      padding: 1.2rem;
+    }
+    .g-item:hover .g-overlay { opacity: 1; }
+    .g-overlay span { font-size: 0.78rem; font-weight: 600; }
+    .g-1 { background: linear-gradient(135deg,#1a0a10,#2a0a1c); }
+    .g-2 { background: linear-gradient(135deg,#0a0a1c,#1a0a2a); }
+    .g-3 { background: linear-gradient(135deg,#0a1a0a,#0a2a1a); }
+    .g-4 { background: linear-gradient(135deg,#1c0a0a,#2a1010); }
+    .g-5 { background: linear-gradient(135deg,#0a151a,#0a252a); }
+    .g-6 { background: linear-gradient(135deg,#1a1a0a,#2a2010); }
+    .g-7 { background: linear-gradient(135deg,#0a0a0a,#1a0a10); }
+    .ig-cta { text-align: center; margin-top: 2rem; }
+    .ig-cta p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
+
+    /* ══════════════════════════════════════════════
+       TEAM
+       ══════════════════════════════════════════════ */
+    #team { background: var(--surface); }
+    .team-header { text-align: center; margin-bottom: 3rem; }
     .team-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem; margin-top: 3rem;
     }
     .team-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 4px; overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
+      border-radius: var(--radius); overflow: hidden;
+      transition: transform var(--transition), border-color var(--transition);
     }
     .team-card:hover {
       transform: translateY(-4px);
@@ -637,7 +759,9 @@
       font-size: 0.67rem; font-weight: 600;
     }
 
-    /* ══ CONTACT ══ */
+    /* ══════════════════════════════════════════════
+       CONTACT
+       ══════════════════════════════════════════════ */
     #contact {
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 5rem; align-items: start;
@@ -647,22 +771,23 @@
     .c-row {
       display: flex; align-items: center; gap: 1rem;
       background: var(--card); border: 1px solid rgba(232,0,122,0.1);
-      border-radius: 6px; padding: 0.9rem 1.1rem;
-      transition: border-color 0.25s;
+      border-radius: var(--radius-lg); padding: 0.9rem 1.1rem;
+      transition: border-color var(--transition);
     }
     .c-row:hover { border-color: rgba(232,0,122,0.35); }
     .c-icon {
-      width: 38px; height: 38px; border-radius: 6px;
-      background: rgba(232,0,122,0.1);
+      width: 40px; height: 40px; border-radius: var(--radius-lg);
+      background: rgba(232,0,122,0.08);
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem; flex-shrink: 0;
     }
     .c-lbl { font-size: 0.67rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
     .c-val { font-size: 0.875rem; font-weight: 500; margin-top: 0.15rem; }
 
+    /* Contact form */
     .contact-form {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 4px; padding: 2.5rem;
+      border-radius: var(--radius-lg); padding: 2.5rem;
     }
     .contact-form h3 {
       font-family: 'Syne', sans-serif;
@@ -670,39 +795,58 @@
     }
     .contact-form .cf-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
     .fg { margin-bottom: 0.9rem; }
+    .fg label {
+      display: block;
+      font-size: 0.72rem; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
     .fg input, .fg textarea, .fg select {
       width: 100%; background: var(--surface);
       border: 1px solid rgba(232,0,122,0.15);
-      border-radius: 6px; color: var(--white);
+      border-radius: var(--radius); color: var(--white);
       padding: 0.85rem 1rem;
       font-family: inherit; font-size: 0.875rem;
-      outline: none; transition: border-color 0.25s;
+      outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+      -webkit-appearance: none;
     }
-    .fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--pink); }
+    .fg input:focus, .fg textarea:focus, .fg select:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px rgba(232,0,122,0.1);
+    }
     .fg textarea { height: 100px; resize: none; }
     .fg input::placeholder, .fg textarea::placeholder { color: var(--muted); }
-    .fg select option { background: var(--surface); }
+    .fg select option { background: var(--surface); color: var(--white); }
     .fg-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
     .cf-submit {
       width: 100%; background: var(--grd);
       color: #fff; border: none;
-      padding: 1rem; border-radius: 4px;
+      padding: 1rem; border-radius: var(--radius);
       font-family: inherit; font-size: 0.875rem; font-weight: 700;
       letter-spacing: 0.03em;
       cursor: pointer; margin-top: 0.4rem;
       box-shadow: 0 0 20px rgba(232,0,122,0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform var(--transition), box-shadow var(--transition);
+      -webkit-tap-highlight-color: transparent;
     }
     .cf-submit:hover {
       transform: translateY(-2px);
       box-shadow: 0 0 40px rgba(232,0,122,0.5);
     }
+    .cf-submit:active { transform: translateY(0); }
+    .cf-submit:disabled {
+      opacity: 0.7; cursor: not-allowed;
+      transform: none; box-shadow: none;
+    }
 
-    /* ══ FOOTER ══ */
+    /* ══════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════ */
     footer {
       background: var(--surface);
       border-top: 1px solid var(--border);
       padding: 2.5rem 4rem;
+      padding-bottom: calc(2.5rem + var(--safe-bottom));
     }
     .footer-inner {
       display: flex; align-items: center;
@@ -712,7 +856,7 @@
     .f-links { display: flex; gap: 2rem; }
     .f-links a {
       font-size: 0.78rem; color: var(--muted);
-      text-decoration: none; transition: color 0.2s;
+      text-decoration: none; transition: color var(--transition);
     }
     .f-links a:hover { color: var(--pink); }
     .f-ig {
@@ -720,221 +864,247 @@
       background: var(--grd); color: #fff;
       text-decoration: none; padding: 0.5rem 1.1rem; border-radius: 3px;
       font-size: 0.78rem; font-weight: 700;
-      transition: transform 0.2s;
+      transition: transform var(--transition);
+      -webkit-tap-highlight-color: transparent;
     }
     .f-ig:hover { transform: translateY(-2px); }
 
-    /* ══ REVEAL ══ */
+    /* ══════════════════════════════════════════════
+       SCROLL REVEAL
+       ══════════════════════════════════════════════ */
     .reveal {
       opacity: 0; transform: translateY(28px);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
     .reveal.visible { opacity: 1; transform: none; }
 
-    /* ══ RESPONSIVE ══ */
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE — Tablet (< 1100px)
+       ══════════════════════════════════════════════ */
     @media (max-width: 1100px) {
       .hero-float { display: none; }
       .achievements-inner { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE — Small tablet (< 900px)
+       ══════════════════════════════════════════════ */
     @media (max-width: 900px) {
       .classes-grid { grid-template-columns: repeat(2, 1fr); }
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
       .g-item.g-tall { grid-row: span 1; aspect-ratio: 1; }
       .team-grid { grid-template-columns: repeat(2, 1fr); }
       .sched-layout { grid-template-columns: 1fr; gap: 2rem; }
-      section { padding: 5rem 2.5rem; }
-      #press { padding: 4rem 2.5rem; }
+      section, #press { padding: 5rem 2.5rem; }
     }
-    @media (max-width: 768px) {
-      /* ── Nav ── */
-      nav { padding: 0.9rem 1.2rem !important; }
-      nav ul { display: none; }
-      .hamburger { display: flex; }
-      .mobile-menu { top: 60px; }
 
-      /* ── Sections ── */
+    /* ══════════════════════════════════════════════
+       RESPONSIVE — Mobile (< 768px)
+       ══════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Nav */
+      nav { padding: 0.9rem 1.2rem !important; }
+      nav.scrolled { padding: 0.7rem 1.2rem !important; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      /* Sections */
       section, #press { padding: 3.5rem 1.2rem; }
-      #hero { padding: 5.5rem 1.2rem 3rem; min-height: 95vh; }
+      #hero { padding: 5.5rem 1.2rem 3rem; min-height: 100dvh; }
       #achievements { padding: 3rem 1.2rem !important; }
 
-      /* ── Hero ── */
-      .hero-badge { font-size: 0.65rem; padding: 0.35rem 0.8rem; margin-bottom: 1.5rem; }
+      /* Hero */
+      .hero-badge { font-size: 0.62rem; padding: 0.35rem 0.8rem; margin-bottom: 1.5rem; }
       .hero-sub { font-size: 0.95rem; }
       .hero-actions { gap: 0.8rem; }
-      .btn-main, .btn-ghost { padding: 0.8rem 1.5rem; font-size: 0.82rem; width: 100%; justify-content: center; }
+      .btn-main, .btn-ghost { padding: 0.85rem 1.5rem; font-size: 0.82rem; width: 100%; justify-content: center; }
       .zdf-strip { flex-wrap: wrap; gap: 0.5rem; margin-top: 1.8rem; padding: 0.6rem 1rem; }
       .zdf-text { font-size: 0.73rem; }
       .hero-stats { gap: 1.2rem; margin-top: 2rem; padding-top: 1.5rem; flex-wrap: wrap; }
       .stat-n { font-size: 1.6rem; }
       .stat-l { font-size: 0.65rem; }
 
-      /* ── About ── */
+      /* About */
       #about { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-box { aspect-ratio: 16/9; font-size: 4rem !important; }
+      .about-box { aspect-ratio: 16/9; }
+      .about-box span { font-size: 4rem !important; }
       .about-float { bottom: -16px; right: -8px; padding: 0.9rem 1.1rem; min-width: 130px; }
       .about-float-n { font-size: 1.3rem !important; }
       .feat-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
       .feat { padding: 0.8rem; font-size: 0.78rem; }
 
-      /* ── Achievements ── */
+      /* Achievements */
       .achievements-inner { grid-template-columns: repeat(2, 1fr); }
       .achiev { padding: 1.8rem 1rem; }
       .achiev-n { font-size: 1.8rem; }
       .achiev-l { font-size: 0.68rem; }
       .achiev-icon { font-size: 1.5rem; }
 
-      /* ── Classes ── */
+      /* Classes */
       .classes-grid { grid-template-columns: 1fr; }
       .classes-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .class-card { padding: 1.8rem 1.5rem; }
       .class-name { font-size: 1.1rem; }
 
-      /* ── Schedule / Table ── */
+      /* Schedule — swap table for cards */
       .sched-layout { grid-template-columns: 1fr; gap: 2rem; }
-      .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      table { min-width: 520px; }
-      th, td { padding: 0.75rem 0.9rem; font-size: 0.78rem; }
+      .table-wrap { display: none; }
+      .sched-cards { display: flex; flex-direction: column; gap: 0.6rem; }
 
-      /* ── Gallery ── */
+      /* Gallery */
       .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; }
       .gallery-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .g-item { font-size: 2.5rem; }
+      /* Show overlay always on touch */
+      .g-overlay { opacity: 1; background: linear-gradient(to top, rgba(232,0,122,0.6), transparent 60%); }
 
-      /* ── Press ── */
+      /* Press */
       .press-inner { flex-direction: column; gap: 1.5rem; }
       .press-head { font-size: 1.4rem; }
-      .press-cards { flex-direction: column; gap: 1rem; }
+      .press-cards { flex-direction: column; gap: 1rem; width: 100%; }
       .press-card { min-width: unset; padding: 1.2rem; }
 
-      /* ── Team ── */
+      /* Team */
       .team-grid { grid-template-columns: 1fr; }
 
-      /* ── Contact ── */
+      /* Contact */
       #contact { grid-template-columns: 1fr; gap: 2rem; }
       .contact-form { padding: 1.8rem 1.2rem; }
       .fg-2 { grid-template-columns: 1fr; }
       .c-row { padding: 0.8rem 1rem; }
       .c-val { font-size: 0.82rem; }
 
-      /* ── Footer ── */
+      /* Footer */
       footer { padding: 1.8rem 1.2rem; }
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .f-links { flex-wrap: wrap; gap: 1.2rem; }
 
-      /* ── Typography ── */
+      /* Typography */
       .s-title { font-size: clamp(1.7rem, 7vw, 2.5rem); }
+
+      /* Touch targets — minimum 44px */
+      .btn-main, .btn-ghost, .nav-pill,
+      .cf-submit, .f-ig { min-height: 48px; }
+      .hamburger { min-width: 48px; min-height: 48px; justify-content: center; align-items: center; }
+      .mobile-menu a { min-height: 48px; display: flex; align-items: center; }
     }
 
+    /* ══════════════════════════════════════════════
+       RESPONSIVE — Small phone (< 480px)
+       ══════════════════════════════════════════════ */
     @media (max-width: 480px) {
       section, #press { padding: 3rem 1rem; }
       #hero { padding: 5rem 1rem 2.5rem; }
 
-      /* ── Hero ── */
       .hero-badge { display: none; }
       .hero-actions { flex-direction: column; }
 
-      /* ── About ── */
       .feat-grid { grid-template-columns: 1fr; }
       .about-float { display: none; }
 
-      /* ── Achievements ── */
       .achievements-inner { grid-template-columns: 1fr 1fr; gap: 0; }
       .achiev { padding: 1.5rem 0.8rem; }
 
-      /* ── Gallery ── */
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
 
-      /* ── Marquee ── */
       .marquee-item { padding: 0 1rem; font-size: 0.78rem; }
 
-      /* ── Buttons full-width ── */
       .btn-main, .btn-ghost { display: flex; width: 100%; justify-content: center; }
 
-      /* ── Nav compact ── */
       nav { padding: 0.8rem 1rem !important; }
       .logo { font-size: 1.4rem; }
       .logo-sub { font-size: 0.48rem; }
 
-      /* ── Press ── */
       .press-cards { width: 100%; }
-      .press-card { width: 100%; box-sizing: border-box; }
+      .press-card { width: 100%; }
 
-      /* ── Team ── */
       .team-grid { grid-template-columns: 1fr; }
       .team-photo { font-size: 3.5rem; }
-    }
-
-    /* Touch targets — minimum 44px for accessibility */
-    @media (max-width: 768px) {
-      .btn-main, .btn-ghost, .nav-pill,
-      .cf-submit, .f-ig { min-height: 44px; }
-      .hamburger { min-width: 44px; min-height: 44px; justify-content: center; }
-      .mobile-menu a { min-height: 44px; display: flex; align-items: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══ NAV ══ -->
-<nav id="navbar">
-  <div>
+<!-- ══════════════════════════════════════════════
+     NAVIGATION
+     ══════════════════════════════════════════════ -->
+<nav id="navbar" role="navigation" aria-label="Hauptnavigation">
+  <div class="logo-wrap">
     <div class="logo">JDS<span class="dot">.</span></div>
     <span class="logo-sub">Janina Dance Studio</span>
   </div>
-  <ul>
+  <ul class="nav-links">
     <li><a href="#about">Studio</a></li>
     <li><a href="#classes">Kurse</a></li>
     <li><a href="#schedule">Stundenplan</a></li>
     <li><a href="#team">Team</a></li>
     <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#contact" class="nav-pill">Probestunde →</a></li>
+    <li><a href="#contact" class="nav-pill">Probestunde</a></li>
   </ul>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
     <span></span><span></span><span></span>
-  </div>
+  </button>
 </nav>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#about" onclick="closeMenu()">Studio</a>
-  <a href="#classes" onclick="closeMenu()">Kurse</a>
-  <a href="#schedule" onclick="closeMenu()">Stundenplan</a>
-  <a href="#team" onclick="closeMenu()">Team</a>
-  <a href="#gallery" onclick="closeMenu()">Gallery</a>
-  <a href="#contact" onclick="closeMenu()">Probestunde buchen</a>
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile Navigation">
+  <a href="#about" data-menu-link>Studio</a>
+  <a href="#classes" data-menu-link>Kurse</a>
+  <a href="#schedule" data-menu-link>Stundenplan</a>
+  <a href="#team" data-menu-link>Team</a>
+  <a href="#gallery" data-menu-link>Gallery</a>
+  <a href="#contact" class="mobile-cta" data-menu-link>Probestunde buchen</a>
 </div>
 
-<!-- ══ HERO ══ -->
+<!-- ══════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════ -->
 <section id="hero">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-  <div class="hero-grid"></div>
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
 
   <div class="hero-content">
     <div class="hero-badge">
-      <span class="live-dot"></span>
+      <span class="live-dot" aria-hidden="true"></span>
       Vaihingen/Enz — Jetzt Probestunde sichern
     </div>
+
     <h1 class="hero-title">
       Janina<br>
       <span class="pink">Dance</span><br>
       <span class="outline">Studio.</span>
     </h1>
+
     <p class="hero-sub">
-      Hip Hop. Breaking. Contemporary. Latin. — Für alle, die Tanz nicht nur fühlen, sondern leben wollen. Von Kindern bis Erwachsene. Von Anfänger bis Meisterschaft.
+      Hip Hop. Breaking. Contemporary. Latin. — Fur alle, die Tanz nicht nur fuhlen, sondern leben wollen. Von Kindern bis Erwachsene. Von Anfanger bis Meisterschaft.
     </p>
+
     <div class="hero-actions">
-      <a href="#contact" class="btn-main">Probestunde buchen ✨</a>
-      <a href="#classes" class="btn-ghost">Alle Kurse ansehen →</a>
+      <a href="#contact" class="btn-main">Probestunde buchen</a>
+      <a href="#classes" class="btn-ghost">Alle Kurse ansehen</a>
     </div>
+
     <div class="zdf-strip">
       <span class="zdf-badge">ZDF</span>
-      <span class="zdf-text"><strong>Wir waren im TV!</strong> — Die Giovanni Zarrella Show &amp; Große Weihnachtsshow 2025</span>
+      <span class="zdf-text"><strong>Wir waren im TV!</strong> — Die Giovanni Zarrella Show &amp; Grosse Weihnachtsshow 2025</span>
     </div>
+
     <div class="hero-stats">
       <div>
         <div class="stat-n">200+</div>
-        <div class="stat-l">Aktive Schüler</div>
+        <div class="stat-l">Aktive Schuler</div>
       </div>
       <div>
         <div class="stat-n">8+</div>
@@ -947,13 +1117,12 @@
     </div>
   </div>
 
-  <!-- Floating card -->
-  <div class="hero-float">
+  <div class="hero-float" aria-hidden="true">
     <div class="float-card">
-      <div class="float-tag">🔥 Beliebt</div>
+      <div class="float-tag">Beliebt</div>
       <div class="float-class">Hip Hop Teens</div>
       <div class="float-time">Montag · 18:00–19:30 Uhr</div>
-      <span class="float-pill">Plätze verfügbar</span>
+      <span class="float-pill">Platze verfugbar</span>
       <div class="float-imgs">
         <div class="float-img">A</div>
         <div class="float-img">J</div>
@@ -964,139 +1133,149 @@
   </div>
 </section>
 
-<!-- ══ MARQUEE ══ -->
-<div class="marquee-wrap">
+<!-- ══════════════════════════════════════════════
+     MARQUEE
+     ══════════════════════════════════════════════ -->
+<div class="marquee-wrap" aria-hidden="true">
   <div class="marquee-track">
     <span class="marquee-item"><span class="m-dot"></span>Hip Hop</span>
     <span class="marquee-item"><span class="m-dot"></span>Breaking</span>
     <span class="marquee-item"><span class="m-dot"></span>Ballett</span>
     <span class="marquee-item"><span class="m-dot"></span>Contemporary</span>
-    <span class="marquee-item"><span class="m-dot"></span>Latin & Salsa</span>
-    <span class="marquee-item"><span class="m-dot"></span>Jazz & Musical</span>
+    <span class="marquee-item"><span class="m-dot"></span>Latin &amp; Salsa</span>
+    <span class="marquee-item"><span class="m-dot"></span>Jazz &amp; Musical</span>
     <span class="marquee-item"><span class="m-dot"></span>Kindertanz</span>
     <span class="marquee-item"><span class="m-dot"></span>Meisterschaftstraining</span>
     <span class="marquee-item"><span class="m-dot"></span>Hip Hop</span>
     <span class="marquee-item"><span class="m-dot"></span>Breaking</span>
     <span class="marquee-item"><span class="m-dot"></span>Ballett</span>
     <span class="marquee-item"><span class="m-dot"></span>Contemporary</span>
-    <span class="marquee-item"><span class="m-dot"></span>Latin & Salsa</span>
-    <span class="marquee-item"><span class="m-dot"></span>Jazz & Musical</span>
+    <span class="marquee-item"><span class="m-dot"></span>Latin &amp; Salsa</span>
+    <span class="marquee-item"><span class="m-dot"></span>Jazz &amp; Musical</span>
     <span class="marquee-item"><span class="m-dot"></span>Kindertanz</span>
     <span class="marquee-item"><span class="m-dot"></span>Meisterschaftstraining</span>
   </div>
 </div>
 
-<!-- ══ ABOUT ══ -->
+<!-- ══════════════════════════════════════════════
+     ABOUT
+     ══════════════════════════════════════════════ -->
 <section id="about">
   <div class="about-visual reveal">
     <div class="about-box">
-      <span style="position:relative;z-index:1;font-size:8rem">💃</span>
+      <span style="position:relative;z-index:1;font-size:8rem" aria-hidden="true">💃</span>
     </div>
     <div class="about-float">
-      <div class="about-float-n">🏆</div>
+      <div class="about-float-n" aria-hidden="true">🏆</div>
       <div class="about-float-n" style="font-size:1.6rem">Meister</div>
       <div class="about-float-l">DHBC Hiphop Champion</div>
     </div>
   </div>
   <div class="about-text">
-    <div class="s-label reveal">Über uns</div>
+    <div class="s-label reveal">Uber uns</div>
     <h2 class="s-title reveal">JDS. ist mehr als<br><span class="pink">eine Tanzschule</span></h2>
     <p class="reveal">
-      Gegründet von Janina in Vaihingen/Enz, ist das Janina Dance Studio ein Ort, wo Leidenschaft auf Disziplin trifft. Wir trainieren nicht nur Schritte — wir formen Charaktere.
+      Gegrundet von Janina in Vaihingen/Enz, ist das Janina Dance Studio ein Ort, wo Leidenschaft auf Disziplin trifft. Wir trainieren nicht nur Schritte — wir formen Charaktere.
     </p>
     <p class="reveal">
-      Von Kindertanz über Hip Hop Meisterschaftstraining bis zu nationalen TV-Auftritten bei ZDF — JDS. steht für echte Qualität, Community und Bühnenperformance auf höchstem Niveau.
+      Von Kindertanz uber Hip Hop Meisterschaftstraining bis zu nationalen TV-Auftritten bei ZDF — JDS. steht fur echte Qualitat, Community und Buhnenperformance auf hochstem Niveau.
     </p>
     <div class="feat-grid reveal">
-      <div class="feat"><span>🎯</span><span>Meisterschaftstraining</span></div>
-      <div class="feat"><span>📺</span><span>ZDF TV-Auftritte</span></div>
-      <div class="feat"><span>🌍</span><span>Alle Niveaus willkommen</span></div>
-      <div class="feat"><span>✨</span><span>Erstkurs gratis</span></div>
+      <div class="feat"><span aria-hidden="true">🎯</span><span>Meisterschaftstraining</span></div>
+      <div class="feat"><span aria-hidden="true">📺</span><span>ZDF TV-Auftritte</span></div>
+      <div class="feat"><span aria-hidden="true">🌍</span><span>Alle Niveaus willkommen</span></div>
+      <div class="feat"><span aria-hidden="true">✨</span><span>Erstkurs gratis</span></div>
     </div>
   </div>
 </section>
 
-<!-- ══ ACHIEVEMENTS ══ -->
-<section id="achievements" style="padding: 5rem 4rem;">
+<!-- ══════════════════════════════════════════════
+     ACHIEVEMENTS
+     ══════════════════════════════════════════════ -->
+<section id="achievements">
   <div class="achievements-inner">
     <div class="achiev reveal">
-      <span class="achiev-icon">🏆</span>
+      <span class="achiev-icon" aria-hidden="true">🏆</span>
       <div class="achiev-n">1.</div>
       <div class="achiev-l">DHBC Hiphop Meisterschaft</div>
     </div>
     <div class="achiev reveal">
-      <span class="achiev-icon">📺</span>
+      <span class="achiev-icon" aria-hidden="true">📺</span>
       <div class="achiev-n">ZDF</div>
       <div class="achiev-l">Giovanni Zarrella Show</div>
     </div>
     <div class="achiev reveal">
-      <span class="achiev-icon">🎭</span>
+      <span class="achiev-icon" aria-hidden="true">🎭</span>
       <div class="achiev-n">200+</div>
-      <div class="achiev-l">Aktive Schülerinnen & Schüler</div>
+      <div class="achiev-l">Aktive Schulerinnen &amp; Schuler</div>
     </div>
     <div class="achiev reveal">
-      <span class="achiev-icon">📅</span>
+      <span class="achiev-icon" aria-hidden="true">📅</span>
       <div class="achiev-n">10+</div>
-      <div class="achiev-l">Jahre Bühnenerfahrung</div>
+      <div class="achiev-l">Jahre Buhnenerfahrung</div>
     </div>
   </div>
 </section>
 
-<!-- ══ CLASSES ══ -->
+<!-- ══════════════════════════════════════════════
+     CLASSES
+     ══════════════════════════════════════════════ -->
 <section id="classes">
   <div class="classes-top">
     <div>
       <div class="s-label reveal">Kursangebot</div>
       <h2 class="s-title reveal">Finde deinen <span class="pink">Style</span></h2>
     </div>
-    <a href="#contact" class="btn-ghost reveal" style="white-space:nowrap">Beratung anfragen →</a>
+    <a href="#contact" class="btn-ghost reveal">Beratung anfragen</a>
   </div>
   <div class="classes-grid">
     <div class="class-card class-main reveal">
-      <span class="class-icon">🎤</span>
+      <span class="class-icon" aria-hidden="true">🎤</span>
       <div class="class-name">Hip Hop</div>
-      <p class="class-desc">Unser Herzstück. Street Styles, Choreografien, Meisterschaftstraining. Energie, Ausdruck, Community. Von Kids bis Erwachsene.</p>
+      <p class="class-desc">Unser Herzstuck. Street Styles, Choreografien, Meisterschaftstraining. Energie, Ausdruck, Community. Von Kids bis Erwachsene.</p>
       <span class="class-pill">Alle Niveaus · Meisterschaft</span>
     </div>
     <div class="class-card reveal">
-      <span class="class-icon">🤸</span>
+      <span class="class-icon" aria-hidden="true">🤸</span>
       <div class="class-name">Breaking</div>
-      <p class="class-desc">B-Boy & B-Girl Grundlagen bis Competition Level. Power Moves, Footwork, Freezes — die Urform des Hip Hop.</p>
-      <span class="class-pill">Ab Anfänger</span>
+      <p class="class-desc">B-Boy &amp; B-Girl Grundlagen bis Competition Level. Power Moves, Footwork, Freezes — die Urform des Hip Hop.</p>
+      <span class="class-pill">Ab Anfanger</span>
     </div>
     <div class="class-card reveal">
-      <span class="class-icon">🩰</span>
+      <span class="class-icon" aria-hidden="true">🩰</span>
       <div class="class-name">Ballett</div>
-      <p class="class-desc">Klassische Technik als Fundament. Körperhaltung, Koordination, Ausdruck. Für Kinder ab 4 Jahren und Erwachsene.</p>
+      <p class="class-desc">Klassische Technik als Fundament. Korperhaltung, Koordination, Ausdruck. Fur Kinder ab 4 Jahren und Erwachsene.</p>
       <span class="class-pill">Ab 4 Jahren</span>
     </div>
     <div class="class-card reveal">
-      <span class="class-icon">🎭</span>
+      <span class="class-icon" aria-hidden="true">🎭</span>
       <div class="class-name">Contemporary</div>
-      <p class="class-desc">Moderne Tanzkunst zwischen Technik und Emotion. Improvisation, Komposition, persönlicher Ausdruck.</p>
+      <p class="class-desc">Moderne Tanzkunst zwischen Technik und Emotion. Improvisation, Komposition, personlicher Ausdruck.</p>
       <span class="class-pill">Ab Mittelstufe</span>
     </div>
     <div class="class-card reveal">
-      <span class="class-icon">🌹</span>
-      <div class="class-name">Latin & Salsa</div>
-      <p class="class-desc">Feuer, Rhythmus, Lebensfreude. Salsa, Bachata, Merengue — solo oder mit Partner. Für alle Niveaus.</p>
+      <span class="class-icon" aria-hidden="true">🌹</span>
+      <div class="class-name">Latin &amp; Salsa</div>
+      <p class="class-desc">Feuer, Rhythmus, Lebensfreude. Salsa, Bachata, Merengue — solo oder mit Partner. Fur alle Niveaus.</p>
       <span class="class-pill">Alle Niveaus</span>
     </div>
     <div class="class-card reveal">
-      <span class="class-icon">🧒</span>
+      <span class="class-icon" aria-hidden="true">🧒</span>
       <div class="class-name">Kindertanz</div>
-      <p class="class-desc">Spielerisch Rhythmus und Kreativität entdecken. Speziell für die Kleinsten ab 3 Jahren — Spaß an Bewegung im Mittelpunkt.</p>
+      <p class="class-desc">Spielerisch Rhythmus und Kreativitat entdecken. Speziell fur die Kleinsten ab 3 Jahren — Spass an Bewegung im Mittelpunkt.</p>
       <span class="class-pill">Ab 3 Jahren</span>
     </div>
   </div>
 </section>
 
-<!-- ══ ZDF / PRESS ══ -->
+<!-- ══════════════════════════════════════════════
+     PRESS / TV
+     ══════════════════════════════════════════════ -->
 <section id="press">
   <div class="press-inner">
     <div class="press-text">
-      <div class="s-label">TV & Medien</div>
-      <div class="press-head">JDS. war im <span style="color:var(--pink)">Fernsehen</span> 📺</div>
+      <div class="s-label">TV &amp; Medien</div>
+      <div class="press-head">JDS. war im <span style="color:var(--pink)">Fernsehen</span></div>
       <div class="press-sub">Wir sind stolz — unsere Crew war 2025 gleich zweimal live auf ZDF!</div>
     </div>
     <div class="press-cards">
@@ -1107,109 +1286,185 @@
       </div>
       <div class="press-card reveal">
         <span class="press-logo">ZDF</span>
-        <div class="press-show">Die Große Weihnachtsshow</div>
+        <div class="press-show">Die Grosse Weihnachtsshow</div>
         <div class="press-date">04. Dezember 2025 · 20:15 Uhr</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ SCHEDULE ══ -->
+<!-- ══════════════════════════════════════════════
+     SCHEDULE
+     ══════════════════════════════════════════════ -->
 <section id="schedule">
   <div class="s-label reveal">Wochenplan</div>
   <h2 class="s-title reveal">Aktuelle <span class="pink">Kurszeiten</span></h2>
   <div class="sched-layout">
     <div class="sched-left">
-      <p>Neue Teilnehmer können jederzeit einsteigen. Der erste Kurs ist kostenlos und unverbindlich — einfach anmelden und ausprobieren.</p>
-      <div class="trial-box">
-        <div class="trial-title">🎁 Probestunde gratis</div>
-        <p>Keine Verpflichtung, kein Risiko. Einfach mitkommen und Spaß haben.</p>
+      <p class="reveal">Neue Teilnehmer konnen jederzeit einsteigen. Der erste Kurs ist kostenlos und unverbindlich — einfach anmelden und ausprobieren.</p>
+      <div class="trial-box reveal">
+        <div class="trial-title">Probestunde gratis</div>
+        <p>Keine Verpflichtung, kein Risiko. Einfach mitkommen und Spass haben.</p>
         <a href="#contact" class="btn-main" style="font-size:0.8rem; padding:0.7rem 1.4rem;">Jetzt anmelden</a>
       </div>
     </div>
-    <div class="table-wrap reveal">
-      <table>
-        <thead>
-          <tr>
-            <th>Tag</th>
-            <th>Uhrzeit</th>
-            <th>Kurs</th>
-            <th>Level</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Montag</td><td>09:00–10:00</td><td>Kindertanz</td><td><span class="lv lv-a">Anfänger</span></td></tr>
-          <tr><td>Montag</td><td>18:00–19:30</td><td>Hip Hop Teens</td><td><span class="lv lv-m">Mittel</span></td></tr>
-          <tr><td>Dienstag</td><td>10:00–11:00</td><td>Ballett Kinder</td><td><span class="lv lv-a">Anfänger</span></td></tr>
-          <tr><td>Dienstag</td><td>17:30–19:00</td><td>Contemporary</td><td><span class="lv lv-f">Fortgeschritten</span></td></tr>
-          <tr><td>Mittwoch</td><td>18:00–19:30</td><td>Breaking / B-Boy</td><td><span class="lv lv-all">Alle Niveaus</span></td></tr>
-          <tr><td>Donnerstag</td><td>09:30–11:00</td><td>Ballett Erwachsene</td><td><span class="lv lv-m">Mittel</span></td></tr>
-          <tr><td>Freitag</td><td>17:00–18:30</td><td>Hip Hop Meisterschaft</td><td><span class="lv lv-f">Fortgeschritten</span></td></tr>
-          <tr><td>Samstag</td><td>10:00–12:00</td><td>Hip Hop Kids</td><td><span class="lv lv-a">Anfänger</span></td></tr>
-        </tbody>
-      </table>
+    <div>
+      <!-- Desktop table -->
+      <div class="table-wrap reveal">
+        <table>
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Uhrzeit</th>
+              <th>Kurs</th>
+              <th>Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Montag</td><td>09:00–10:00</td><td>Kindertanz</td><td><span class="lv lv-a">Anfanger</span></td></tr>
+            <tr><td>Montag</td><td>18:00–19:30</td><td>Hip Hop Teens</td><td><span class="lv lv-m">Mittel</span></td></tr>
+            <tr><td>Dienstag</td><td>10:00–11:00</td><td>Ballett Kinder</td><td><span class="lv lv-a">Anfanger</span></td></tr>
+            <tr><td>Dienstag</td><td>17:30–19:00</td><td>Contemporary</td><td><span class="lv lv-f">Fortgeschritten</span></td></tr>
+            <tr><td>Mittwoch</td><td>18:00–19:30</td><td>Breaking / B-Boy</td><td><span class="lv lv-all">Alle Niveaus</span></td></tr>
+            <tr><td>Donnerstag</td><td>09:30–11:00</td><td>Ballett Erwachsene</td><td><span class="lv lv-m">Mittel</span></td></tr>
+            <tr><td>Freitag</td><td>17:00–18:30</td><td>Hip Hop Meisterschaft</td><td><span class="lv lv-f">Fortgeschritten</span></td></tr>
+            <tr><td>Samstag</td><td>10:00–12:00</td><td>Hip Hop Kids</td><td><span class="lv lv-a">Anfanger</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Mobile cards -->
+      <div class="sched-cards reveal">
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Montag</div>
+            <div class="sched-card-name">Kindertanz</div>
+            <div class="sched-card-time">09:00–10:00</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-a">Anfanger</span></div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Montag</div>
+            <div class="sched-card-name">Hip Hop Teens</div>
+            <div class="sched-card-time">18:00–19:30</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-m">Mittel</span></div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Dienstag</div>
+            <div class="sched-card-name">Ballett Kinder</div>
+            <div class="sched-card-time">10:00–11:00</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-a">Anfanger</span></div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Dienstag</div>
+            <div class="sched-card-name">Contemporary</div>
+            <div class="sched-card-time">17:30–19:00</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-f">Fortgeschritten</span></div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Mittwoch</div>
+            <div class="sched-card-name">Breaking / B-Boy</div>
+            <div class="sched-card-time">18:00–19:30</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-all">Alle Niveaus</span></div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Donnerstag</div>
+            <div class="sched-card-name">Ballett Erwachsene</div>
+            <div class="sched-card-time">09:30–11:00</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-m">Mittel</span></div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Freitag</div>
+            <div class="sched-card-name">Hip Hop Meisterschaft</div>
+            <div class="sched-card-time">17:00–18:30</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-f">Fortgeschritten</span></div>
+        </div>
+        <div class="sched-card">
+          <div class="sched-card-left">
+            <div class="sched-card-day">Samstag</div>
+            <div class="sched-card-name">Hip Hop Kids</div>
+            <div class="sched-card-time">10:00–12:00</div>
+          </div>
+          <div class="sched-card-right"><span class="lv lv-a">Anfanger</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ══ GALLERY ══ -->
+<!-- ══════════════════════════════════════════════
+     GALLERY
+     ══════════════════════════════════════════════ -->
 <section id="gallery">
   <div class="gallery-top">
     <div>
       <div class="s-label reveal">Community</div>
       <h2 class="s-title reveal">Behind the <span class="pink">Scenes</span></h2>
     </div>
-    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" class="btn-main reveal" style="font-size:0.8rem; padding:0.7rem 1.4rem;">📸 @jds.dancestudio</a>
+    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" rel="noopener noreferrer" class="btn-main reveal" style="font-size:0.8rem; padding:0.7rem 1.4rem;">@jds.dancestudio</a>
   </div>
   <div class="gallery-grid">
     <div class="g-item g-tall g-1 reveal">
-      <span>🎤</span>
+      <span aria-hidden="true">🎤</span>
       <div class="g-overlay"><span>Hip Hop Showcase</span></div>
     </div>
     <div class="g-item g-2 reveal">
-      <span>🤸</span>
+      <span aria-hidden="true">🤸</span>
       <div class="g-overlay"><span>Breaking Training</span></div>
     </div>
     <div class="g-item g-3 reveal">
-      <span>🏆</span>
+      <span aria-hidden="true">🏆</span>
       <div class="g-overlay"><span>DHBC Meisterschaft</span></div>
     </div>
     <div class="g-item g-4 reveal">
-      <span>📺</span>
+      <span aria-hidden="true">📺</span>
       <div class="g-overlay"><span>ZDF Auftritt</span></div>
     </div>
     <div class="g-item g-5 reveal">
-      <span>🎭</span>
-      <div class="g-overlay"><span>Vaihinger Straßenfest</span></div>
+      <span aria-hidden="true">🎭</span>
+      <div class="g-overlay"><span>Vaihinger Strassenfest</span></div>
     </div>
     <div class="g-item g-6 reveal">
-      <span>🧒</span>
+      <span aria-hidden="true">🧒</span>
       <div class="g-overlay"><span>Kids Show</span></div>
     </div>
     <div class="g-item g-7 reveal">
-      <span>👥</span>
+      <span aria-hidden="true">👥</span>
       <div class="g-overlay"><span>JDS. Team</span></div>
     </div>
   </div>
   <div class="ig-cta reveal">
     <p>Mehr Videos, Reels und Fotos auf Instagram — folg uns!</p>
-    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" class="btn-ghost">@jds.dancestudio → Instagram</a>
+    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" rel="noopener noreferrer" class="btn-ghost">@jds.dancestudio — Instagram</a>
   </div>
 </section>
 
-<!-- ══ TEAM ══ -->
+<!-- ══════════════════════════════════════════════
+     TEAM
+     ══════════════════════════════════════════════ -->
 <section id="team">
-  <div style="text-align:center; margin-bottom:3rem">
+  <div class="team-header">
     <div class="s-label reveal">Das Team</div>
     <h2 class="s-title reveal">Hinter <span class="pink">JDS.</span></h2>
   </div>
   <div class="team-grid">
     <div class="team-card reveal">
-      <div class="team-photo">💃</div>
+      <div class="team-photo" aria-hidden="true">💃</div>
       <div class="team-body">
         <div class="team-name">Janina</div>
-        <div class="team-role">Gründerin & Head Coach</div>
-        <div class="team-bio">Janina hat JDS. gegründet und zu einer der bekanntesten Tanzschulen der Region gemacht. TV-Erfahrung, Wettkampferfolge und ein Herz fürs Tanzen.</div>
+        <div class="team-role">Grunderin &amp; Head Coach</div>
+        <div class="team-bio">Janina hat JDS. gegrundet und zu einer der bekanntesten Tanzschulen der Region gemacht. TV-Erfahrung, Wettkampferfolge und ein Herz furs Tanzen.</div>
         <div class="team-tags">
           <span class="team-tag">Hip Hop</span>
           <span class="team-tag">Contemporary</span>
@@ -1218,11 +1473,11 @@
       </div>
     </div>
     <div class="team-card reveal">
-      <div class="team-photo">🕺</div>
+      <div class="team-photo" aria-hidden="true">🕺</div>
       <div class="team-body">
         <div class="team-name">Trainer</div>
-        <div class="team-role">Breaking & Street Coach</div>
-        <div class="team-bio">Aus der B-Boy-Szene kommend, bringt er authentisches Straßenfeeling in jede Einheit. Power Moves, Footwork, Cypher-Kultur.</div>
+        <div class="team-role">Breaking &amp; Street Coach</div>
+        <div class="team-bio">Aus der B-Boy-Szene kommend, bringt er authentisches Strassenfeeling in jede Einheit. Power Moves, Footwork, Cypher-Kultur.</div>
         <div class="team-tags">
           <span class="team-tag">Breaking</span>
           <span class="team-tag">Hip Hop</span>
@@ -1231,11 +1486,11 @@
       </div>
     </div>
     <div class="team-card reveal">
-      <div class="team-photo">🌹</div>
+      <div class="team-photo" aria-hidden="true">🌹</div>
       <div class="team-body">
         <div class="team-name">Trainerin</div>
-        <div class="team-role">Latin & Kindertanz Coach</div>
-        <div class="team-bio">Leidenschaft und Rhythmus sind ihre Sprache. Von Kindertanz bis Salsa — sie sorgt für gute Laune und echte Fortschritte.</div>
+        <div class="team-role">Latin &amp; Kindertanz Coach</div>
+        <div class="team-bio">Leidenschaft und Rhythmus sind ihre Sprache. Von Kindertanz bis Salsa — sie sorgt fur gute Laune und echte Fortschritte.</div>
         <div class="team-tags">
           <span class="team-tag">Salsa</span>
           <span class="team-tag">Bachata</span>
@@ -1246,7 +1501,9 @@
   </div>
 </section>
 
-<!-- ══ CONTACT ══ -->
+<!-- ══════════════════════════════════════════════
+     CONTACT
+     ══════════════════════════════════════════════ -->
 <section id="contact">
   <div class="contact-left">
     <div class="s-label reveal">Kontakt</div>
@@ -1254,74 +1511,93 @@
     <p class="reveal">Komm einfach vorbei, schreib uns, oder ruf an. Die erste Stunde ist kostenlos. Kein Vertrag, kein Risiko — einfach Tanz.</p>
     <div class="contact-rows">
       <div class="c-row reveal">
-        <div class="c-icon">📍</div>
+        <div class="c-icon" aria-hidden="true">📍</div>
         <div>
           <div class="c-lbl">Adresse</div>
-          <div class="c-val">Musterstraße 1, 71665 Vaihingen/Enz</div>
+          <div class="c-val">Musterstrasse 1, 71665 Vaihingen/Enz</div>
         </div>
       </div>
       <div class="c-row reveal">
-        <div class="c-icon">📞</div>
+        <div class="c-icon" aria-hidden="true">📞</div>
         <div>
           <div class="c-lbl">Telefon</div>
-          <div class="c-val">+49 (0) 123 456 789</div>
+          <div class="c-val"><a href="tel:+49123456789" style="color:inherit;text-decoration:none">+49 (0) 123 456 789</a></div>
         </div>
       </div>
       <div class="c-row reveal">
-        <div class="c-icon">✉️</div>
+        <div class="c-icon" aria-hidden="true">✉️</div>
         <div>
           <div class="c-lbl">E-Mail</div>
-          <div class="c-val">info@jds-dancestudio.de</div>
+          <div class="c-val"><a href="mailto:info@jds-dancestudio.de" style="color:inherit;text-decoration:none">info@jds-dancestudio.de</a></div>
         </div>
       </div>
       <div class="c-row reveal">
-        <div class="c-icon">🕐</div>
+        <div class="c-icon" aria-hidden="true">🕐</div>
         <div>
-          <div class="c-lbl">Öffnungszeiten</div>
+          <div class="c-lbl">Offnungszeiten</div>
           <div class="c-val">Mo–Fr 09:00–20:00 · Sa 09:00–14:00</div>
         </div>
       </div>
       <div class="c-row reveal">
-        <div class="c-icon">📸</div>
+        <div class="c-icon" aria-hidden="true">📸</div>
         <div>
           <div class="c-lbl">Instagram</div>
           <div class="c-val">
-            <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" style="color:var(--pink); text-decoration:none; font-weight:600">@jds.dancestudio</a>
+            <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" rel="noopener noreferrer" style="color:var(--pink); text-decoration:none; font-weight:600">@jds.dancestudio</a>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <div class="contact-form reveal">
-    <h3>Probestunde buchen ✨</h3>
-    <div class="cf-sub">Kostenlos, unverbindlich, einfach Spaß haben.</div>
-    <form onsubmit="handleSubmit(event)">
+    <h3>Probestunde buchen</h3>
+    <div class="cf-sub">Kostenlos, unverbindlich, einfach Spass haben.</div>
+    <form id="contactForm" novalidate>
       <div class="fg-2">
-        <div class="fg"><input type="text" placeholder="Vorname" required></div>
-        <div class="fg"><input type="text" placeholder="Nachname" required></div>
+        <div class="fg">
+          <label for="firstName">Vorname</label>
+          <input type="text" id="firstName" name="firstName" placeholder="Dein Vorname" required autocomplete="given-name">
+        </div>
+        <div class="fg">
+          <label for="lastName">Nachname</label>
+          <input type="text" id="lastName" name="lastName" placeholder="Dein Nachname" required autocomplete="family-name">
+        </div>
       </div>
-      <div class="fg"><input type="email" placeholder="E-Mail Adresse" required></div>
-      <div class="fg"><input type="tel" placeholder="Telefon (optional)"></div>
       <div class="fg">
-        <select>
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" name="email" placeholder="deine@email.de" required autocomplete="email">
+      </div>
+      <div class="fg">
+        <label for="phone">Telefon (optional)</label>
+        <input type="tel" id="phone" name="phone" placeholder="+49 ..." autocomplete="tel">
+      </div>
+      <div class="fg">
+        <label for="course">Kursinteresse</label>
+        <select id="course" name="course">
           <option value="" disabled selected>Welcher Kurs interessiert dich?</option>
-          <option>Hip Hop</option>
-          <option>Breaking / B-Boy</option>
-          <option>Ballett</option>
-          <option>Contemporary</option>
-          <option>Latin & Salsa</option>
-          <option>Kindertanz</option>
-          <option>Meisterschaftstraining</option>
-          <option>Noch nicht sicher — Beratung gewünscht</option>
+          <option value="hiphop">Hip Hop</option>
+          <option value="breaking">Breaking / B-Boy</option>
+          <option value="ballett">Ballett</option>
+          <option value="contemporary">Contemporary</option>
+          <option value="latin">Latin &amp; Salsa</option>
+          <option value="kindertanz">Kindertanz</option>
+          <option value="meisterschaft">Meisterschaftstraining</option>
+          <option value="beratung">Noch nicht sicher — Beratung gewunscht</option>
         </select>
       </div>
-      <div class="fg"><textarea placeholder="Fragen oder Anmerkungen?"></textarea></div>
-      <button type="submit" class="cf-submit" id="submitBtn">Jetzt Probestunde sichern →</button>
+      <div class="fg">
+        <label for="message">Nachricht (optional)</label>
+        <textarea id="message" name="message" placeholder="Fragen oder Anmerkungen?"></textarea>
+      </div>
+      <button type="submit" class="cf-submit" id="submitBtn">Jetzt Probestunde sichern</button>
     </form>
   </div>
 </section>
 
-<!-- ══ FOOTER ══ -->
+<!-- ══════════════════════════════════════════════
+     FOOTER
+     ══════════════════════════════════════════════ -->
 <footer>
   <div class="footer-inner">
     <div>
@@ -1333,68 +1609,128 @@
       <a href="#">Impressum</a>
       <a href="#">Datenschutz</a>
     </div>
-    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" class="f-ig">📸 Instagram</a>
+    <a href="https://www.instagram.com/jds.dancestudio/" target="_blank" rel="noopener noreferrer" class="f-ig">Instagram</a>
   </div>
 </footer>
 
+<!-- ══════════════════════════════════════════════
+     SCRIPTS
+     ══════════════════════════════════════════════ -->
 <script>
-  // Mobile menu
-  function toggleMenu() {
-    document.getElementById('hamburger').classList.toggle('open');
-    document.getElementById('mobileMenu').classList.toggle('open');
-  }
-  function closeMenu() {
-    document.getElementById('hamburger').classList.remove('open');
-    document.getElementById('mobileMenu').classList.remove('open');
-  }
+  (function() {
+    'use strict';
 
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 55);
-        observer.unobserve(e.target);
+    // ── Mobile menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuLinks = mobileMenu.querySelectorAll('[data-menu-link]');
+
+    function openMenu() {
+      hamburger.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      mobileMenu.classList.add('open');
+      document.body.classList.add('menu-open');
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    }
+
+    function toggleMenu() {
+      if (mobileMenu.classList.contains('open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    menuLinks.forEach(function(link) {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        closeMenu();
+        hamburger.focus();
       }
     });
-  }, { threshold: 0.07 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Compact nav — mobile-aware padding
-  window.addEventListener('scroll', () => {
-    const nav = document.getElementById('navbar');
-    const isMobile = window.innerWidth <= 480;
-    const isTablet = window.innerWidth <= 768;
-    const hPad = isMobile ? '1rem' : isTablet ? '1.2rem' : '4rem';
-    const vPad = window.scrollY > 60 ? '0.7rem' : (isTablet ? '0.9rem' : '1.2rem');
-    nav.style.padding = `${vPad} ${hPad}`;
-  });
+    // ── Scroll-based nav compact ──
+    var lastScroll = 0;
+    var ticking = false;
+    var navbar = document.getElementById('navbar');
 
-  // Also fix on resize
-  window.addEventListener('resize', () => {
-    if (window.scrollY <= 60) {
-      const nav = document.getElementById('navbar');
-      const isMobile = window.innerWidth <= 480;
-      const isTablet = window.innerWidth <= 768;
-      nav.style.padding = isMobile ? '0.8rem 1rem'
-        : isTablet ? '0.9rem 1.2rem'
-        : '1.2rem 4rem';
-    }
-  });
+    window.addEventListener('scroll', function() {
+      lastScroll = window.scrollY;
+      if (!ticking) {
+        window.requestAnimationFrame(function() {
+          if (lastScroll > 60) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
 
-  // Form
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.textContent = '✓ Anfrage gesendet! Wir melden uns bald.';
-    btn.style.background = 'linear-gradient(135deg, #15803d, #16a34a)';
-    btn.style.boxShadow = '0 0 20px rgba(22,163,74,0.35)';
-    setTimeout(() => {
-      btn.textContent = 'Jetzt Probestunde sichern →';
-      btn.style.background = '';
-      btn.style.boxShadow = '';
-      e.target.reset();
-    }, 4000);
-  }
+    // ── Scroll reveal with IntersectionObserver ──
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      revealObserver.observe(el);
+    });
+
+    // ── Form handling ──
+    var form = document.getElementById('contactForm');
+    var submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Basic validation
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      // Show success state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Anfrage gesendet! Wir melden uns.';
+      submitBtn.style.background = 'linear-gradient(135deg, #15803d, #16a34a)';
+      submitBtn.style.boxShadow = '0 0 20px rgba(22,163,74,0.35)';
+
+      setTimeout(function() {
+        submitBtn.textContent = 'Jetzt Probestunde sichern';
+        submitBtn.style.background = '';
+        submitBtn.style.boxShadow = '';
+        submitBtn.disabled = false;
+        form.reset();
+      }, 4000);
+    });
+
+    // ── Close mobile menu on resize to desktop ──
+    var mql = window.matchMedia('(min-width: 769px)');
+    mql.addEventListener('change', function(e) {
+      if (e.matches && mobileMenu.classList.contains('open')) {
+        closeMenu();
+      }
+    });
+
+  })();
 </script>
 </body>
 </html>
